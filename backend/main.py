@@ -50,7 +50,7 @@ origins = [
     "http://0.0.0.0:3000",
 ]
 if FRONTEND_URL:
-    origins.append(FRONTEND_URL)
+    origins.append(FRONTEND_URL.rstrip("/"))
 # Add wildcard for preview environments if strictly necessary (be careful in prod)
 # origins.append("https://*.vercel.app") 
 
