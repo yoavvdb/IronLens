@@ -439,7 +439,7 @@ def get_logs(date: str = Query(..., description="Date in YYYY-MM-DD format"), co
                     "text": cm["text"],
                     "image_url": image_url,
                     "is_coach_feedback": bool(cm["is_coach_feedback"]),
-                    "created_at": cm["created_at"]
+                    "created_at": str(cm["created_at"])
                 })
     
             video_url = f"{BASE_URL}/uploads/{log['video_filename']}" if log['video_filename'] else None
@@ -455,7 +455,7 @@ def get_logs(date: str = Query(..., description="Date in YYYY-MM-DD format"), co
                 "result_score": log["result_score"],
                 "video_url": video_url,
                 "thumbnail_url": thumb_url,
-                "created_at": log["created_at"],
+                "created_at": str(log["created_at"]),
                 "user_id": log["user_id"],
                 "user_name": log["user_name"], 
                 "user_avatar": log["user_avatar"], 
@@ -655,7 +655,20 @@ def get_notifications(user_id: str = Query(...)):
         ''', (user_id,))
         rows = c.fetchall()
         
-    return [dict(row) for row in rows]
+    # Manually map to ensure bool/str conversion
+    notifications = []
+    for r in rows:
+        notifications.append({
+            "id": r["id"],
+            "sender_id": r["sender_id"],
+            "sender_name": r["sender_name"],
+            "sender_avatar": r["sender_avatar"],
+            "type": r["type"],
+            "message": r["message"],
+            "is_read": bool(r["is_read"]),
+            "created_at": str(r["created_at"])
+        })
+    return notifications
 
 @app.post("/notifications/mark-read")
 def mark_notifications_read(payload: MarkRead):
