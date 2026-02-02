@@ -29,7 +29,7 @@ app = FastAPI()
 UPLOAD_DIR = os.getenv("UPLOAD_DIR", "uploads")
 THUMB_DIR = os.path.join(UPLOAD_DIR, "thumbnails")
 # DATABASE_URL handled in db.py
-BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:8000")
+BASE_URL = os.getenv("RENDER_EXTERNAL_URL") or os.getenv("BASE_URL", "http://127.0.0.1:8000")
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 ALLOWED_USERS = os.getenv("ALLOWED_USERS", "") # Comma-separated emails
 
