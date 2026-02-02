@@ -48,6 +48,7 @@ origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://0.0.0.0:3000",
+    "https://iron-qlk6ru8op-yoavvdbs-projects.vercel.app",
 ]
 if FRONTEND_URL:
     origins.append(FRONTEND_URL.rstrip("/"))
