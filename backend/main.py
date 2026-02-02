@@ -333,7 +333,10 @@ def get_programming(date: str = Query(..., description="Date in YYYY-MM-DD"), co
         row = c.fetchone()
     
     if row:
-        return json.loads(row['content'])
+        content = row['content']
+        if isinstance(content, str):
+            return json.loads(content)
+        return content
     return [] 
 
 @app.post("/programming")
