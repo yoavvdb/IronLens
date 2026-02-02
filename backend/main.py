@@ -124,7 +124,7 @@ def init_db():
                 log_id TEXT NOT NULL,
                 user_id TEXT NOT NULL,
                 text TEXT NOT NULL,
-                is_coach_feedback BOOLEAN DEFAULT 0,
+                is_coach_feedback BOOLEAN DEFAULT FALSE,
                 image_filename TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -139,7 +139,7 @@ def init_db():
                 sender_id TEXT NOT NULL,
                 type TEXT NOT NULL, -- 'kudos', 'comment'
                 message TEXT NOT NULL,
-                is_read BOOLEAN DEFAULT 0,
+                is_read BOOLEAN DEFAULT FALSE,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
