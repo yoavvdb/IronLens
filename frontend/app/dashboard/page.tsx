@@ -204,7 +204,7 @@ function SortableBlock({
                         <div key={set.id} className="flex gap-2 items-center group">
                             {/* Type Selector */}
                             <select
-                                className="h-7 w-20 bg-black/20 text-[10px] rounded border border-white/5 text-muted-foreground"
+                                className="h-10 w-24 bg-black/20 text-base rounded border border-white/5 text-muted-foreground"
                                 value={set.type}
                                 onChange={(e) => updateSetInBlock(index, si, 'type', e.target.value)}
                             >
@@ -218,7 +218,7 @@ function SortableBlock({
                                 <Input
                                     value={set.text || ""}
                                     onChange={(e) => updateSetInBlock(index, si, 'text', e.target.value)}
-                                    className="h-7 bg-black/20 text-xs border-white/5"
+                                    className="h-10 bg-black/20 text-base border-white/5"
                                     placeholder={set.type === 'movement' ? "e.g. 15 Thrusters" : "e.g. Rest 2 mins"}
                                 />
                             ) : (
@@ -226,20 +226,20 @@ function SortableBlock({
                                     <Input
                                         value={set.reps || ""}
                                         onChange={(e) => updateSetInBlock(index, si, 'reps', e.target.value)}
-                                        className="h-7 w-20 bg-black/20 text-xs border-white/5 font-mono text-center"
+                                        className="h-10 w-20 bg-black/20 text-base border-white/5 font-mono text-center px-1"
                                         placeholder="Reps"
                                     />
-                                    <span className="text-muted-foreground text-xs">@</span>
+                                    <span className="text-muted-foreground text-sm">@</span>
                                     <Input
                                         value={set.weight || ""}
                                         onChange={(e) => updateSetInBlock(index, si, 'weight', e.target.value)}
-                                        className="h-7 w-24 bg-black/20 text-xs border-white/5 font-mono text-center"
-                                        placeholder="Load/%"
+                                        className="h-10 w-24 bg-black/20 text-base border-white/5 font-mono text-center px-1"
+                                        placeholder="Load"
                                     />
                                     <Input
                                         value={set.text || ""}
                                         onChange={(e) => updateSetInBlock(index, si, 'text', e.target.value)}
-                                        className="h-7 bg-black/20 text-xs border-white/5"
+                                        className="h-10 bg-black/20 text-base border-white/5 flex-1 min-w-[100px]"
                                         placeholder="Notes..."
                                     />
                                 </>
