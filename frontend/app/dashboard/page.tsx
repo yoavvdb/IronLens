@@ -1034,14 +1034,20 @@ export default function DashboardPage() {
                                                                 </div>
                                                             ) : (
                                                                 <div className="flex flex-col gap-0.5">
-                                                                    {block.data.filter(s => s.type === 'working').slice(0, 3).map((set, idx) => (
+                                                                    {block.data.filter(s => s.type === 'working' || s.type === 'note').slice(0, 3).map((set, idx) => (
                                                                         <div key={idx} className="text-white">
-                                                                            {set.reps} <span className="text-muted-foreground">@</span> {set.weight}
-                                                                            {set.text && <span className="text-xs text-yellow-500/80 ml-2 font-sans italic">// {set.text}</span>}
+                                                                            {set.type === 'note' ? (
+                                                                                <span className="text-sm text-yellow-500 font-medium">{set.text}</span>
+                                                                            ) : (
+                                                                                <>
+                                                                                    {set.reps} <span className="text-muted-foreground">@</span> {set.weight}
+                                                                                    {set.text && <span className="text-xs text-yellow-500/80 ml-2 font-sans italic">// {set.text}</span>}
+                                                                                </>
+                                                                            )}
                                                                         </div>
                                                                     ))}
-                                                                    {block.data.filter(s => s.type === 'working').length > 3 && (
-                                                                        <span className="text-xs text-muted-foreground">+{block.data.filter(s => s.type === 'working').length - 3} more</span>
+                                                                    {block.data.filter(s => s.type === 'working' || s.type === 'note').length > 3 && (
+                                                                        <span className="text-xs text-muted-foreground">+{block.data.filter(s => s.type === 'working' || s.type === 'note').length - 3} more</span>
                                                                     )}
                                                                 </div>
                                                             )}
