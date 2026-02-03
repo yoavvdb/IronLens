@@ -599,6 +599,30 @@ export default function DashboardPage() {
         setInputSets(inputSets.filter((_, i) => i !== index))
     }
 
+    const handleDeleteLog = async () => {
+        if (!confirm("Are you sure you want to delete this log? This cannot be undone.")) return;
+
+        setIsSubmitting(true);
+        try {
+            const res = await fetch(`${API_BASE_URL}/logs/${editingLogId}?user_id=${currentUser?.id}`, {
+                method: "DELETE",
+            });
+
+            if (res.ok) {
+                setDrawerOpen(false);
+                setEditingLogId(null);
+                fetchData();
+            } else {
+                alert("Failed to delete log");
+            }
+        } catch (error) {
+            console.error("Delete failed", error);
+            alert("Error deleting log");
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
+
     const handleSubmit = async () => {
         if (!currentUser) return;
 
