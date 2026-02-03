@@ -1123,7 +1123,9 @@ export default function DashboardPage() {
                                                     animate={{ height: "auto", opacity: 1 }}
                                                     exit={{ height: 0, opacity: 0 }}
                                                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                                    <div className="border-t border-white/5 bg-background/50 overflow-hidden">
+                                                    className="overflow-hidden"
+                                                >
+                                                    <div className="border-t border-white/5 bg-background/50">
                                                         {/* Metcon Description (Still valuable to show fully if expanding) */}
                                                         {isMetcon && (
                                                             <div className="p-6 pb-0">
@@ -1135,177 +1137,177 @@ export default function DashboardPage() {
                                                                 </div>
                                                             </div>
                                                         )}
-                                                        
+
                                                         {/* NOTE: Strength sets are now fully visible in the collapsed card body, so we hide them here to avoid duplication. */}
 
 
-                                                    {/* Community Activity / Leaderboard */}
-                                                    <div className="px-6 pb-6">
-                                                        <div className="flex items-center gap-4 mb-4">
-                                                            <div className="h-px flex-1 bg-white/10" />
-                                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-                                                                <Medal className="h-3 w-3" /> Community Session Activity
-                                                            </span>
-                                                            <div className="h-px flex-1 bg-white/10" />
-                                                        </div>
-
-                                                        {userCount === 0 ? (
-                                                            <div className="text-center py-8 border border-dashed border-white/5 rounded-2xl">
-                                                                <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">First to move wins! 🏆</p>
+                                                        {/* Community Activity / Leaderboard */}
+                                                        <div className="px-6 pb-6">
+                                                            <div className="flex items-center gap-4 mb-4">
+                                                                <div className="h-px flex-1 bg-white/10" />
+                                                                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                                                                    <Medal className="h-3 w-3" /> Community Session Activity
+                                                                </span>
+                                                                <div className="h-px flex-1 bg-white/10" />
                                                             </div>
-                                                        ) : (
-                                                            <div className="space-y-4">
-                                                                {(() => {
-                                                                    // Calculate Leaderboard Data for this block
-                                                                    const userLeaderboardData = Object.entries(exerciseLogs).map(([userId, userLogs]) => {
-                                                                        const parsedScores = userLogs.map(log => ({
-                                                                            log,
-                                                                            parsed: parseScore(log.result_score)
-                                                                        }));
-                                                                        const scoreType = parsedScores[0]?.parsed.type || 'reps';
-                                                                        const sorted = [...parsedScores].sort((a, b) => {
-                                                                            if (scoreType === 'time') return a.parsed.value - b.parsed.value;
-                                                                            return b.parsed.value - a.parsed.value;
+
+                                                            {userCount === 0 ? (
+                                                                <div className="text-center py-8 border border-dashed border-white/5 rounded-2xl">
+                                                                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">First to move wins! 🏆</p>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="space-y-4">
+                                                                    {(() => {
+                                                                        // Calculate Leaderboard Data for this block
+                                                                        const userLeaderboardData = Object.entries(exerciseLogs).map(([userId, userLogs]) => {
+                                                                            const parsedScores = userLogs.map(log => ({
+                                                                                log,
+                                                                                parsed: parseScore(log.result_score)
+                                                                            }));
+                                                                            const scoreType = parsedScores[0]?.parsed.type || 'reps';
+                                                                            const sorted = [...parsedScores].sort((a, b) => {
+                                                                                if (scoreType === 'time') return a.parsed.value - b.parsed.value;
+                                                                                return b.parsed.value - a.parsed.value;
+                                                                            });
+                                                                            return {
+                                                                                userId,
+                                                                                bestLog: sorted[0].log,
+                                                                                userLogs: userLogs,
+                                                                                user_name: userLogs[0].user_name,
+                                                                                user_avatar: userLogs[0].user_avatar
+                                                                            };
+                                                                        }).sort((a, b) => {
+                                                                            const scoreA = parseScore(a.bestLog.result_score);
+                                                                            const scoreB = parseScore(b.bestLog.result_score);
+                                                                            if (scoreA.type === 'time') return scoreA.value - scoreB.value;
+                                                                            return scoreB.value - scoreA.value;
                                                                         });
-                                                                        return {
-                                                                            userId,
-                                                                            bestLog: sorted[0].log,
-                                                                            userLogs: userLogs,
-                                                                            user_name: userLogs[0].user_name,
-                                                                            user_avatar: userLogs[0].user_avatar
-                                                                        };
-                                                                    }).sort((a, b) => {
-                                                                        const scoreA = parseScore(a.bestLog.result_score);
-                                                                        const scoreB = parseScore(b.bestLog.result_score);
-                                                                        if (scoreA.type === 'time') return scoreA.value - scoreB.value;
-                                                                        return scoreB.value - scoreA.value;
-                                                                    });
 
-                                                                    return userLeaderboardData.map((data, rankIdx) => {
-                                                                        const isCurrentUser = data.userId === currentUser?.id;
-                                                                        const isOpen = expandedAthletes[data.userId] || false;
-                                                                        const rank = rankIdx + 1;
+                                                                        return userLeaderboardData.map((data, rankIdx) => {
+                                                                            const isCurrentUser = data.userId === currentUser?.id;
+                                                                            const isOpen = expandedAthletes[data.userId] || false;
+                                                                            const rank = rankIdx + 1;
 
-                                                                        return (
-                                                                            <motion.div
-                                                                                layout
-                                                                                key={data.userId}
-                                                                                className={cn(
-                                                                                    "rounded-xl border transition-all overflow-hidden",
-                                                                                    isCurrentUser ? "bg-primary/5 border-primary/20" : "bg-white/5 border-white/5"
-                                                                                )}
-                                                                            >
-                                                                                {/* Athlete Header - Collapsible Trigger */}
-                                                                                <div
-                                                                                    onClick={() => setExpandedAthletes(prev => ({ ...prev, [data.userId]: !isOpen }))}
-                                                                                    className="p-4 cursor-pointer flex items-center justify-between hover:bg-white/5 transition-colors"
-                                                                                >
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className="relative">
-                                                                                            <div className="h-10 w-10 rounded-full border border-white/10 overflow-hidden shadow-lg">
-                                                                                                <img src={data.user_avatar} alt={data.user_name} className="h-full w-full object-cover" />
-                                                                                            </div>
-                                                                                            {rank <= 3 && (
-                                                                                                <div className={cn(
-                                                                                                    "absolute -top-1 -right-1 h-5 w-5 rounded-full flex items-center justify-center border text-[10px] font-bold shadow-2xl",
-                                                                                                    rank === 1 ? "bg-yellow-500 border-yellow-300 text-black animate-pulse" :
-                                                                                                        rank === 2 ? "bg-zinc-300 border-white text-black" :
-                                                                                                            "bg-orange-600 border-orange-400 text-white"
-                                                                                                )}>
-                                                                                                    {rank === 1 ? "1" : rank === 2 ? "2" : "3"}
-                                                                                                </div>
-                                                                                            )}
-                                                                                        </div>
-                                                                                        <div className="flex flex-col">
-                                                                                            <span className="text-xs font-black text-white italic tracking-tight">{data.user_name} {isCurrentUser && "(YOU)"}</span>
-                                                                                            <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest flex items-center gap-1.5 mt-0.5">
-                                                                                                {data.userLogs.length} SETS • BEST: <span className="text-primary">{data.bestLog.result_score}</span>
-                                                                                            </span>
-                                                                                        </div>
-                                                                                    </div>
-
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <div className="flex flex-col items-end">
-                                                                                            <div className="text-sm font-mono font-black text-white">{data.bestLog.result_score}</div>
-                                                                                            <div className="text-[8px] font-bold text-muted-foreground uppercase">PR SCORE</div>
-                                                                                        </div>
-                                                                                        {isOpen ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                {/* Expanded Sets Grid */}
-                                                                                <AnimatePresence>
-                                                                                    {isOpen && (
-                                                                                        <motion.div
-                                                                                            initial={{ height: 0, opacity: 0 }}
-                                                                                            animate={{ height: "auto", opacity: 1 }}
-                                                                                            exit={{ height: 0, opacity: 0 }}
-                                                                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                                                                            className="border-t border-white/5 bg-black/30 p-4"
-                                                                                        >
-                                                                                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                                                                                                {data.userLogs.map((log) => {
-                                                                                                    const showThumbnail = !!log.thumbnail_url;
-                                                                                                    return (
-                                                                                                        <div
-                                                                                                            key={log.id}
-                                                                                                            className="relative group bg-muted/20 rounded-xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all cursor-pointer aspect-[3/4] shadow-xl"
-                                                                                                            onClick={() => handleViewLog(log)}
-                                                                                                        >
-                                                                                                            <div className="w-full h-full relative">
-                                                                                                                {showThumbnail ? (
-                                                                                                                    <img src={log.thumbnail_url!} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" />
-                                                                                                                ) : log.video_url && (
-                                                                                                                    <video src={log.video_url} className="w-full h-full object-cover" />
-                                                                                                                )}
-
-                                                                                                                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
-
-                                                                                                                {/* LARGER SCORES WHEN EXPANDED */}
-                                                                                                                <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
-                                                                                                                    <div className="text-lg font-black text-white italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-none tracking-tighter">
-                                                                                                                        {log.result_score}
-                                                                                                                    </div>
-                                                                                                                </div>
-
-                                                                                                                <div className="absolute bottom-1 left-2 right-2 flex items-center justify-between text-[7px] font-black uppercase tracking-widest text-white/40">
-                                                                                                                    <button
-                                                                                                                        onClick={(e) => { e.stopPropagation(); handleKudos(log.id, e); }}
-                                                                                                                        className={cn(
-                                                                                                                            "flex items-center gap-0.5 px-1.5 py-0.5 rounded-full transition-all duration-300",
-                                                                                                                            log.kudos_count > 0 ? "text-primary bg-primary/10 shadow-[0_0_10px_rgba(34,197,94,0.3)]" : "hover:text-white"
-                                                                                                                        )}
-                                                                                                                    >
-                                                                                                                        <ThumbsUp className={cn("h-2 w-2", log.kudos_count > 0 && "fill-primary")} /> {log.kudos_count}
-                                                                                                                    </button>
-                                                                                                                    <div className="flex items-center gap-0.5">
-                                                                                                                        <MessageSquare className="h-2 w-2" /> {log.comments.length}
-                                                                                                                    </div>
-                                                                                                                </div>
-
-                                                                                                                {currentUser.id === log.user_id && (
-                                                                                                                    <button
-                                                                                                                        onClick={(e) => { e.stopPropagation(); handleEditLog(log, e); }}
-                                                                                                                        className="absolute top-2 right-2 p-1.5 bg-black/80 hover:bg-white text-white hover:text-black rounded-full transition-colors z-10"
-                                                                                                                    >
-                                                                                                                        <Pencil className="h-2.5 w-2.5" />
-                                                                                                                    </button>
-                                                                                                                )}
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    )
-                                                                                                })}
-                                                                                            </div>
-                                                                                        </motion.div>
+                                                                            return (
+                                                                                <motion.div
+                                                                                    layout
+                                                                                    key={data.userId}
+                                                                                    className={cn(
+                                                                                        "rounded-xl border transition-all overflow-hidden",
+                                                                                        isCurrentUser ? "bg-primary/5 border-primary/20" : "bg-white/5 border-white/5"
                                                                                     )}
-                                                                                </AnimatePresence>
-                                                                            </motion.div>
-                                                                        );
-                                                                    });
-                                                                })()}
-                                                            </div>
-                                                        )}
-                                                    </div>
+                                                                                >
+                                                                                    {/* Athlete Header - Collapsible Trigger */}
+                                                                                    <div
+                                                                                        onClick={() => setExpandedAthletes(prev => ({ ...prev, [data.userId]: !isOpen }))}
+                                                                                        className="p-4 cursor-pointer flex items-center justify-between hover:bg-white/5 transition-colors"
+                                                                                    >
+                                                                                        <div className="flex items-center gap-3">
+                                                                                            <div className="relative">
+                                                                                                <div className="h-10 w-10 rounded-full border border-white/10 overflow-hidden shadow-lg">
+                                                                                                    <img src={data.user_avatar} alt={data.user_name} className="h-full w-full object-cover" />
+                                                                                                </div>
+                                                                                                {rank <= 3 && (
+                                                                                                    <div className={cn(
+                                                                                                        "absolute -top-1 -right-1 h-5 w-5 rounded-full flex items-center justify-center border text-[10px] font-bold shadow-2xl",
+                                                                                                        rank === 1 ? "bg-yellow-500 border-yellow-300 text-black animate-pulse" :
+                                                                                                            rank === 2 ? "bg-zinc-300 border-white text-black" :
+                                                                                                                "bg-orange-600 border-orange-400 text-white"
+                                                                                                    )}>
+                                                                                                        {rank === 1 ? "1" : rank === 2 ? "2" : "3"}
+                                                                                                    </div>
+                                                                                                )}
+                                                                                            </div>
+                                                                                            <div className="flex flex-col">
+                                                                                                <span className="text-xs font-black text-white italic tracking-tight">{data.user_name} {isCurrentUser && "(YOU)"}</span>
+                                                                                                <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest flex items-center gap-1.5 mt-0.5">
+                                                                                                    {data.userLogs.length} SETS • BEST: <span className="text-primary">{data.bestLog.result_score}</span>
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div className="flex items-center gap-3">
+                                                                                            <div className="flex flex-col items-end">
+                                                                                                <div className="text-sm font-mono font-black text-white">{data.bestLog.result_score}</div>
+                                                                                                <div className="text-[8px] font-bold text-muted-foreground uppercase">PR SCORE</div>
+                                                                                            </div>
+                                                                                            {isOpen ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    {/* Expanded Sets Grid */}
+                                                                                    <AnimatePresence>
+                                                                                        {isOpen && (
+                                                                                            <motion.div
+                                                                                                initial={{ height: 0, opacity: 0 }}
+                                                                                                animate={{ height: "auto", opacity: 1 }}
+                                                                                                exit={{ height: 0, opacity: 0 }}
+                                                                                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                                                                                className="border-t border-white/5 bg-black/30 p-4"
+                                                                                            >
+                                                                                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                                                                                                    {data.userLogs.map((log) => {
+                                                                                                        const showThumbnail = !!log.thumbnail_url;
+                                                                                                        return (
+                                                                                                            <div
+                                                                                                                key={log.id}
+                                                                                                                className="relative group bg-muted/20 rounded-xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all cursor-pointer aspect-[3/4] shadow-xl"
+                                                                                                                onClick={() => handleViewLog(log)}
+                                                                                                            >
+                                                                                                                <div className="w-full h-full relative">
+                                                                                                                    {showThumbnail ? (
+                                                                                                                        <img src={log.thumbnail_url!} className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity" />
+                                                                                                                    ) : log.video_url && (
+                                                                                                                        <video src={log.video_url} className="w-full h-full object-cover" />
+                                                                                                                    )}
+
+                                                                                                                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
+
+                                                                                                                    {/* LARGER SCORES WHEN EXPANDED */}
+                                                                                                                    <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
+                                                                                                                        <div className="text-lg font-black text-white italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-none tracking-tighter">
+                                                                                                                            {log.result_score}
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    <div className="absolute bottom-1 left-2 right-2 flex items-center justify-between text-[7px] font-black uppercase tracking-widest text-white/40">
+                                                                                                                        <button
+                                                                                                                            onClick={(e) => { e.stopPropagation(); handleKudos(log.id, e); }}
+                                                                                                                            className={cn(
+                                                                                                                                "flex items-center gap-0.5 px-1.5 py-0.5 rounded-full transition-all duration-300",
+                                                                                                                                log.kudos_count > 0 ? "text-primary bg-primary/10 shadow-[0_0_10px_rgba(34,197,94,0.3)]" : "hover:text-white"
+                                                                                                                            )}
+                                                                                                                        >
+                                                                                                                            <ThumbsUp className={cn("h-2 w-2", log.kudos_count > 0 && "fill-primary")} /> {log.kudos_count}
+                                                                                                                        </button>
+                                                                                                                        <div className="flex items-center gap-0.5">
+                                                                                                                            <MessageSquare className="h-2 w-2" /> {log.comments.length}
+                                                                                                                        </div>
+                                                                                                                    </div>
+
+                                                                                                                    {currentUser.id === log.user_id && (
+                                                                                                                        <button
+                                                                                                                            onClick={(e) => { e.stopPropagation(); handleEditLog(log, e); }}
+                                                                                                                            className="absolute top-2 right-2 p-1.5 bg-black/80 hover:bg-white text-white hover:text-black rounded-full transition-colors z-10"
+                                                                                                                        >
+                                                                                                                            <Pencil className="h-2.5 w-2.5" />
+                                                                                                                        </button>
+                                                                                                                    )}
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        )
+                                                                                                    })}
+                                                                                                </div>
+                                                                                            </motion.div>
+                                                                                        )}
+                                                                                    </AnimatePresence>
+                                                                                </motion.div>
+                                                                            );
+                                                                        });
+                                                                    })()}
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
