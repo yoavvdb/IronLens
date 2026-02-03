@@ -1034,20 +1034,23 @@ export default function DashboardPage() {
                                                                 </div>
                                                             ) : (
                                                                 <div className="flex flex-col gap-0.5">
-                                                                    {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').slice(0, 3).map((set, idx) => (
-                                                                        <div key={idx} className="text-white flex items-center gap-2">
-                                                                            {set.type === 'note' ? (
-                                                                                <span className="text-sm text-yellow-500 font-medium block">
-                                                                                    {set.text || <span className="opacity-50 italic">Empty Note</span>}
-                                                                                </span>
-                                                                            ) : (
-                                                                                <>
-                                                                                    <span>{set.reps} <span className="text-muted-foreground">@</span> {set.weight}</span>
-                                                                                    {set.text && <span className="text-xs text-yellow-500/80 font-sans italic">// {set.text}</span>}
-                                                                                </>
-                                                                            )}
-                                                                        </div>
-                                                                    ))}
+                                                                    {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').slice(0, 3).map((set, idx) => {
+                                                                        const isNote = set.type?.toLowerCase() === 'note';
+                                                                        return (
+                                                                            <div key={idx} className="text-white flex items-center gap-2">
+                                                                                {isNote ? (
+                                                                                    <span className="text-sm text-yellow-500 font-medium block">
+                                                                                        {set.text || <span className="opacity-50 italic">Empty Note</span>}
+                                                                                    </span>
+                                                                                ) : (
+                                                                                    <>
+                                                                                        <span>{set.reps} <span className="text-muted-foreground">@</span> {set.weight}</span>
+                                                                                        {set.text && <span className="text-xs text-yellow-500/80 font-sans italic">// {set.text}</span>}
+                                                                                    </>
+                                                                                )}
+                                                                            </div>
+                                                                        )
+                                                                    })}
                                                                     {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').length > 3 && (
                                                                         <span className="text-xs text-muted-foreground">+{block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').length - 3} more</span>
                                                                     )}
@@ -1136,39 +1139,42 @@ export default function DashboardPage() {
                                                             </div>
                                                         ) : (
                                                             <div className="grid grid-cols-1 gap-2">
-                                                                {block.data.map((set, idx) => (
-                                                                    <div key={idx} className={cn(
-                                                                        "flex flex-col p-3 rounded-xl border",
-                                                                        set.type === 'note' ? "bg-yellow-500/10 border-yellow-500/20" : "bg-white/5 border-white/5"
-                                                                    )}>
-                                                                        {/* Header Row: Type & Main Stats */}
-                                                                        <div className="flex items-center justify-between">
-                                                                            <span className={cn(
-                                                                                "text-[10px] font-bold uppercase tracking-wider",
-                                                                                set.type === 'note' ? "text-yellow-500" : "text-muted-foreground"
-                                                                            )}>
-                                                                                {set.type}
-                                                                            </span>
+                                                                {block.data.map((set, idx) => {
+                                                                    const isNote = set.type?.toLowerCase() === 'note';
+                                                                    return (
+                                                                        <div key={idx} className={cn(
+                                                                            "flex flex-col p-3 rounded-xl border",
+                                                                            isNote ? "bg-yellow-500/10 border-yellow-500/20" : "bg-white/5 border-white/5"
+                                                                        )}>
+                                                                            {/* Header Row: Type & Main Stats */}
+                                                                            <div className="flex items-center justify-between">
+                                                                                <span className={cn(
+                                                                                    "text-[10px] font-bold uppercase tracking-wider",
+                                                                                    isNote ? "text-yellow-500" : "text-muted-foreground"
+                                                                                )}>
+                                                                                    {set.type}
+                                                                                </span>
 
-                                                                            {set.type !== 'note' && set.type !== 'movement' && (
-                                                                                <div className="flex items-center gap-3">
-                                                                                    <span className="text-sm font-medium text-white">{set.reps} Reps</span>
-                                                                                    <span className="text-sm font-mono text-primary font-bold">{set.weight}</span>
+                                                                                {!isNote && set.type?.toLowerCase() !== 'movement' && (
+                                                                                    <div className="flex items-center gap-3">
+                                                                                        <span className="text-sm font-medium text-white">{set.reps} Reps</span>
+                                                                                        <span className="text-sm font-mono text-primary font-bold">{set.weight}</span>
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+
+                                                                            {/* Content Row: Text / Note */}
+                                                                            {set.text && (
+                                                                                <div className={cn(
+                                                                                    "mt-1 text-sm leading-snug",
+                                                                                    isNote ? "text-yellow-200 font-medium" : "text-muted-foreground italic"
+                                                                                )}>
+                                                                                    {set.type?.toLowerCase() === 'movement' ? set.text : `// ${set.text}`}
                                                                                 </div>
                                                                             )}
                                                                         </div>
-
-                                                                        {/* Content Row: Text / Note */}
-                                                                        {set.text && (
-                                                                            <div className={cn(
-                                                                                "mt-1 text-sm leading-snug",
-                                                                                set.type === 'note' ? "text-yellow-200 font-medium" : "text-muted-foreground italic"
-                                                                            )}>
-                                                                                {set.type === 'movement' ? set.text : `// ${set.text}`}
-                                                                            </div>
-                                                                        )}
-                                                                    </div>
-                                                                ))}
+                                                                    )
+                                                                })}
                                                             </div>
                                                         )}
                                                     </div>
