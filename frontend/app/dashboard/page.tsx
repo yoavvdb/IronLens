@@ -1329,6 +1329,17 @@ export default function DashboardPage() {
                                     // The global group might exist because other users logged it, but we only want to show it 
                                     // in "Other Work" if the user themselves did it.
                                     const userHasLogs = currentUser && userGroups[currentUser.id] && userGroups[currentUser.id].length > 0;
+
+                                    // DEBUG: Trace why folders are showing
+                                    if (title === 'test') {
+                                        console.log('Ghost Debug:', {
+                                            title,
+                                            currentUserId: currentUser?.id,
+                                            hasLogs: userHasLogs,
+                                            userKeys: Object.keys(userGroups)
+                                        });
+                                    }
+
                                     return userHasLogs;
                                 })
                                 .map(([title, userGroups]) => {
