@@ -827,7 +827,9 @@ export default function DashboardPage() {
                         <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center shadow-[0_0_15px_rgba(34,197,94,0.4)]">
                             <Dumbbell className="h-5 w-5 text-black" />
                         </div>
-                        <h1 className="text-xl font-black italic tracking-tighter hidden sm:block">IRON<span className="text-primary">LENS</span></h1>
+                        <h1 className="text-xl font-black italic tracking-tighter hidden sm:block">
+                            IRON<span className="text-primary">LENS</span> <span className="text-[10px] non-italic font-mono text-yellow-500 border border-yellow-500/30 px-1 rounded ml-1">v2.1</span>
+                        </h1>
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -1318,7 +1320,17 @@ export default function DashboardPage() {
 
                             {/* Other Work Section (Logs not in Programming) */}
                             {Object.entries(groupedLogs)
-                                .filter(([title]) => !programming.some(p => p.name === title))
+                                .filter(([title, userGroups]) => {
+                                    // 1. Must not be in current programming
+                                    const isprogramming = programming.some(p => p.name === title);
+                                    if (isprogramming) return false;
+
+                                    // 2. Ghost Fix: ONLY show if CURRENT USER has logs in this group
+                                    // The global group might exist because other users logged it, but we only want to show it 
+                                    // in "Other Work" if the user themselves did it.
+                                    const userHasLogs = currentUser && userGroups[currentUser.id] && userGroups[currentUser.id].length > 0;
+                                    return userHasLogs;
+                                })
                                 .map(([title, userGroups]) => {
                                     const userCount = Object.keys(userGroups).length;
                                     const isOpen = expandedFolder === title;
