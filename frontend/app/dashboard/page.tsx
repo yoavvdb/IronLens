@@ -1034,20 +1034,22 @@ export default function DashboardPage() {
                                                                 </div>
                                                             ) : (
                                                                 <div className="flex flex-col gap-0.5">
-                                                                    {block.data.filter(s => s.type === 'working' || s.type === 'note').slice(0, 3).map((set, idx) => (
-                                                                        <div key={idx} className="text-white">
+                                                                    {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').slice(0, 3).map((set, idx) => (
+                                                                        <div key={idx} className="text-white flex items-center gap-2">
                                                                             {set.type === 'note' ? (
-                                                                                <span className="text-sm text-yellow-500 font-medium">{set.text}</span>
+                                                                                <span className="text-sm text-yellow-500 font-medium block">
+                                                                                    {set.text || <span className="opacity-50 italic">Empty Note</span>}
+                                                                                </span>
                                                                             ) : (
                                                                                 <>
-                                                                                    {set.reps} <span className="text-muted-foreground">@</span> {set.weight}
-                                                                                    {set.text && <span className="text-xs text-yellow-500/80 ml-2 font-sans italic">// {set.text}</span>}
+                                                                                    <span>{set.reps} <span className="text-muted-foreground">@</span> {set.weight}</span>
+                                                                                    {set.text && <span className="text-xs text-yellow-500/80 font-sans italic">// {set.text}</span>}
                                                                                 </>
                                                                             )}
                                                                         </div>
                                                                     ))}
-                                                                    {block.data.filter(s => s.type === 'working' || s.type === 'note').length > 3 && (
-                                                                        <span className="text-xs text-muted-foreground">+{block.data.filter(s => s.type === 'working' || s.type === 'note').length - 3} more</span>
+                                                                    {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').length > 3 && (
+                                                                        <span className="text-xs text-muted-foreground">+{block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').length - 3} more</span>
                                                                     )}
                                                                 </div>
                                                             )}
