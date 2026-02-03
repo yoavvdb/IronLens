@@ -15,7 +15,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Input } from "@/components/ui/input"
-import { Upload, Loader2, Dumbbell, ChevronUp, ChevronDown, Plus, MessageSquare, ThumbsUp, Medal, Save, LogOut, Edit3, FolderOpen, Pencil, Trash2, Video, VideoOff, Maximize2, Bell, Check, Camera, X, GripVertical, Copy, Search, UserCheck } from "lucide-react"
+import { Upload, Loader2, Dumbbell, ChevronUp, ChevronDown, Plus, MessageSquare, ThumbsUp, Medal, Save, LogOut, Edit3, FolderOpen, Pencil, Trash2, Video, VideoOff, Maximize2, Bell, Check, Camera, X, GripVertical, Copy, Search, UserCheck, Menu } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
@@ -312,6 +312,7 @@ export default function DashboardPage() {
     const [showAllAthletes, setShowAllAthletes] = React.useState(false)
     const [notifOpen, setNotifOpen] = React.useState(false)
     const [expandedAthletes, setExpandedAthletes] = React.useState<Record<string, boolean>>({})
+    const [menuOpen, setMenuOpen] = React.useState(false)
 
     // --- Coach Access State ---
     const [isCoachSearchOpen, setIsCoachSearchOpen] = React.useState(false)
@@ -831,67 +832,75 @@ export default function DashboardPage() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        {/* Notifications */}
-                        <Popover open={notifOpen} onOpenChange={setNotifOpen}>
-                            <PopoverTrigger asChild>
-                                <button className="relative p-2 rounded-full hover:bg-white/10 transition-colors" onClick={handleMarkRead}>
-                                    <Bell className="h-5 w-5 text-muted-foreground" />
-                                    {unreadCount > 0 && (
-                                        <div className="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-red-500 border border-black animate-pulse" />
-                                    )}
-                                </button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-80 p-0 bg-zinc-950 border-white/10" align="end">
-                                <div className="p-3 border-b border-white/10 font-bold text-sm">Notifications</div>
-                                <div className="max-h-80 overflow-y-auto">
-                                    {notifications.length === 0 ? (
-                                        <div className="p-4 text-center text-xs text-muted-foreground">No notifications</div>
-                                    ) : (
-                                        notifications.map(n => (
-                                            <div key={n.id} className={cn("flex gap-3 p-3 border-b border-white/5 hover:bg-white/5", !n.is_read && "bg-white/5")}>
-                                                <div className="h-8 w-8 rounded-full bg-slate-700 overflow-hidden shrink-0">
-                                                    <img src={n.sender_avatar} className="h-full w-full" />
-                                                </div>
-                                                <div className="space-y-1">
-                                                    <p className="text-xs text-white leading-tight">{n.message}</p>
-                                                    <p className="text-[10px] text-muted-foreground">{new Date(n.created_at).toLocaleTimeString()}</p>
-                                                </div>
-                                            </div>
-                                        ))
-                                    )}
-                                </div>
-                            </PopoverContent>
-                        </Popover>
+                        {/* Mobile Menu Toggle */}
+                        <Button size="icon" variant="ghost" className="md:hidden text-white" onClick={() => setMenuOpen(true)}>
+                            <Menu className="h-6 w-6" />
+                        </Button>
 
-                        {/* Profile & Access */}
-                        <div className="flex items-center gap-3">
-                            {currentUser.role === 'athlete' && !currentUser.followed_coach_id && (
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-8 gap-2 border-primary/20 hover:border-primary/50 text-xs font-bold"
-                                    onClick={() => setIsCoachSearchOpen(true)}
-                                >
-                                    <Plus className="h-3.5 w-3.5" /> FIND COACH
-                                </Button>
-                            )}
-                            {currentUser.role === 'athlete' && currentUser.followed_coach_id && (
-                                <button
-                                    onClick={handleUnfollowCoach}
-                                    className="text-[10px] text-muted-foreground hover:text-white underline px-2"
-                                >
-                                    Unfollow
-                                </button>
-                            )}
-                            <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/5">
-                                <div className="h-6 w-6 rounded-full overflow-hidden bg-muted">
-                                    <img src={currentUser.avatar_url} alt="" className="h-full w-full" />
+                        {/* DESKTOP ACTIONS (Hidden on Mobile) */}
+                        <div className="hidden md:flex items-center gap-4">
+                            {/* Notifications */}
+                            <Popover open={notifOpen} onOpenChange={setNotifOpen}>
+                                <PopoverTrigger asChild>
+                                    <button className="relative p-2 rounded-full hover:bg-white/10 transition-colors" onClick={handleMarkRead}>
+                                        <Bell className="h-5 w-5 text-muted-foreground" />
+                                        {unreadCount > 0 && (
+                                            <div className="absolute top-1.5 right-1.5 h-2.5 w-2.5 rounded-full bg-red-500 border border-black animate-pulse" />
+                                        )}
+                                    </button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-80 p-0 bg-zinc-950 border-white/10" align="end">
+                                    <div className="p-3 border-b border-white/10 font-bold text-sm">Notifications</div>
+                                    <div className="max-h-80 overflow-y-auto">
+                                        {notifications.length === 0 ? (
+                                            <div className="p-4 text-center text-xs text-muted-foreground">No notifications</div>
+                                        ) : (
+                                            notifications.map(n => (
+                                                <div key={n.id} className={cn("flex gap-3 p-3 border-b border-white/5 hover:bg-white/5", !n.is_read && "bg-white/5")}>
+                                                    <div className="h-8 w-8 rounded-full bg-slate-700 overflow-hidden shrink-0">
+                                                        <img src={n.sender_avatar} className="h-full w-full" />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <p className="text-xs text-white leading-tight">{n.message}</p>
+                                                        <p className="text-[10px] text-muted-foreground">{new Date(n.created_at).toLocaleTimeString()}</p>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+
+                            {/* Profile & Access */}
+                            <div className="flex items-center gap-3">
+                                {currentUser.role === 'athlete' && !currentUser.followed_coach_id && (
+                                    <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-8 gap-2 border-primary/20 hover:border-primary/50 text-xs font-bold"
+                                        onClick={() => setIsCoachSearchOpen(true)}
+                                    >
+                                        <Plus className="h-3.5 w-3.5" /> FIND COACH
+                                    </Button>
+                                )}
+                                {currentUser.role === 'athlete' && currentUser.followed_coach_id && (
+                                    <button
+                                        onClick={handleUnfollowCoach}
+                                        className="text-[10px] text-muted-foreground hover:text-white underline px-2"
+                                    >
+                                        Unfollow
+                                    </button>
+                                )}
+                                <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/5">
+                                    <div className="h-6 w-6 rounded-full overflow-hidden bg-muted">
+                                        <img src={currentUser.avatar_url} alt="" className="h-full w-full" />
+                                    </div>
+                                    <span className="text-xs font-bold text-white max-w-[100px] truncate">{currentUser.name}</span>
                                 </div>
-                                <span className="text-xs font-bold text-white max-w-[100px] truncate">{currentUser.name}</span>
+                                <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full" onClick={handleLogout}>
+                                    <LogOut className="h-4 w-4 text-muted-foreground" />
+                                </Button>
                             </div>
-                            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full" onClick={handleLogout}>
-                                <LogOut className="h-4 w-4 text-muted-foreground" />
-                            </Button>
                         </div>
                     </div>
                 </div>
@@ -1815,6 +1824,79 @@ export default function DashboardPage() {
                         <p className="text-[10px] text-muted-foreground text-center italic">
                             Leave empty to make your programming public to anyone who finds you.
                         </p>
+                    </div>
+                </DrawerContent>
+            </Drawer>
+
+            {/* Mobile Navigation Drawer */}
+            <Drawer open={menuOpen} onOpenChange={setMenuOpen}>
+                <DrawerContent className="bg-background border-t border-white/10">
+                    <div className="mx-auto w-full max-w-sm p-6 space-y-6">
+                        {/* Profile Header */}
+                        <div className="flex items-center gap-4 pb-6 border-b border-white/10">
+                            <div className="h-12 w-12 rounded-full overflow-hidden bg-muted border-2 border-white/10">
+                                <img src={currentUser.avatar_url} className="h-full w-full object-cover" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-white">{currentUser.name}</h3>
+                                <p className="text-xs text-muted-foreground uppercase">{currentUser.role === 'coach' ? 'Coach' : 'Athlete'}</p>
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="space-y-2">
+                            {/* Notifications Item */}
+                            <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+                                <span className="text-sm font-medium">Notifications</span>
+                                <div className="flex items-center gap-2">
+                                    {unreadCount > 0 && <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 rounded-full">{unreadCount}</span>}
+                                    <Popover open={notifOpen} onOpenChange={setNotifOpen}>
+                                        <PopoverTrigger asChild>
+                                            <Button size="sm" variant="ghost" className="h-8"><Bell className="h-4 w-4" /></Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-80 p-0 bg-zinc-950 border-white/10" align="end">
+                                            <div className="p-3 border-b border-white/10 font-bold text-sm">Notifications</div>
+                                            <div className="max-h-60 overflow-y-auto">
+                                                {notifications.length === 0 ? <div className="p-4 text-xs text-muted-foreground">None</div> : notifications.map(n => (
+                                                    <div key={n.id} className="p-3 border-b border-white/5 text-xs text-white">{n.message}</div>
+                                                ))}
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
+                            </div>
+
+                            {currentUser.role === 'athlete' && !currentUser.followed_coach_id && (
+                                <Button
+                                    variant="outline"
+                                    className="w-full justify-start h-12 text-sm font-bold"
+                                    onClick={() => { setMenuOpen(false); setIsCoachSearchOpen(true); }}
+                                >
+                                    <Plus className="mr-2 h-4 w-4" /> FIND A COACH
+                                </Button>
+                            )}
+
+                            {currentUser.role === 'athlete' && currentUser.followed_coach_id && (
+                                <div className="flex items-center justify-between p-3 rounded-lg bg-primary/10 border border-primary/20">
+                                    <span className="text-sm font-bold text-primary">Coach Connected</span>
+                                    <button onClick={handleUnfollowCoach} className="text-xs text-muted-foreground underline">Unfollow</button>
+                                </div>
+                            )}
+
+                            {currentUser.role === 'coach' && (
+                                <Button
+                                    className="w-full justify-start h-12 text-sm font-bold bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/30"
+                                    onClick={() => { setMenuOpen(false); setIsSettingAccessCode(true); }}
+                                >
+                                    <Pencil className="mr-2 h-4 w-4" /> Manage Access Code
+                                </Button>
+                            )}
+                        </div>
+
+                        {/* Logout */}
+                        <Button variant="destructive" className="w-full h-12 font-bold" onClick={handleLogout}>
+                            <LogOut className="mr-2 h-4 w-4" /> Log Out
+                        </Button>
                     </div>
                 </DrawerContent>
             </Drawer>
