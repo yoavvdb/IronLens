@@ -201,52 +201,51 @@ function SortableBlock({
                 // Sets Editor for Strength
                 <div className="space-y-2 pl-4 border-l-2 border-white/5 animate-in fade-in slide-in-from-top-1">
                     {block.data.map((set, si) => (
-                        <div key={set.id} className="flex gap-2 items-center group">
-                            {/* Type Selector */}
-                            <select
-                                className="h-10 w-24 bg-black/20 text-base rounded border border-white/5 text-muted-foreground"
-                                value={set.type}
-                                onChange={(e) => updateSetInBlock(index, si, 'type', e.target.value)}
-                            >
-                                <option value="working">Work</option>
-                                <option value="warmup">Warmup</option>
-                                <option value="movement">Move</option>
-                                <option value="note">Note</option>
-                            </select>
+                        <div key={set.id} className="flex flex-wrap md:flex-nowrap gap-2 items-center group mb-2 border-b border-white/5 pb-2 md:border-0 md:pb-0 md:mb-0">
+                            {/* Primary Data Row */}
+                            <div className="flex items-center gap-2">
+                                <select
+                                    className="h-10 w-24 bg-black/20 text-base rounded border border-white/5 text-muted-foreground"
+                                    value={set.type}
+                                    onChange={(e) => updateSetInBlock(index, si, 'type', e.target.value)}
+                                >
+                                    <option value="working">Work</option>
+                                    <option value="warmup">Warmup</option>
+                                    <option value="movement">Move</option>
+                                    <option value="note">Note</option>
+                                </select>
 
-                            {set.type === 'note' || set.type === 'movement' ? (
+                                {set.type !== 'note' && set.type !== 'movement' && (
+                                    <>
+                                        <Input
+                                            value={set.reps || ""}
+                                            onChange={(e) => updateSetInBlock(index, si, 'reps', e.target.value)}
+                                            className="h-10 w-20 bg-black/20 text-base border-white/5 font-mono text-center px-1"
+                                            placeholder="Reps"
+                                        />
+                                        <span className="text-muted-foreground text-sm">@</span>
+                                        <Input
+                                            value={set.weight || ""}
+                                            onChange={(e) => updateSetInBlock(index, si, 'weight', e.target.value)}
+                                            className="h-10 w-24 bg-black/20 text-base border-white/5 font-mono text-center px-1"
+                                            placeholder="Load"
+                                        />
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Note Input - Full Width on Mobile, Flex on Desktop */}
+                            <div className="w-full md:w-auto md:flex-1 min-w-[150px]">
                                 <Input
                                     value={set.text || ""}
                                     onChange={(e) => updateSetInBlock(index, si, 'text', e.target.value)}
-                                    className="h-10 bg-black/20 text-base border-white/5"
-                                    placeholder={set.type === 'movement' ? "e.g. 15 Thrusters" : "e.g. Rest 2 mins"}
+                                    className="h-10 w-full bg-black/20 text-base border-white/5"
+                                    placeholder={set.type === 'movement' ? "e.g. 15 Thrusters" : "Notes..."}
                                 />
-                            ) : (
-                                <>
-                                    <Input
-                                        value={set.reps || ""}
-                                        onChange={(e) => updateSetInBlock(index, si, 'reps', e.target.value)}
-                                        className="h-10 w-20 bg-black/20 text-base border-white/5 font-mono text-center px-1"
-                                        placeholder="Reps"
-                                    />
-                                    <span className="text-muted-foreground text-sm">@</span>
-                                    <Input
-                                        value={set.weight || ""}
-                                        onChange={(e) => updateSetInBlock(index, si, 'weight', e.target.value)}
-                                        className="h-10 w-24 bg-black/20 text-base border-white/5 font-mono text-center px-1"
-                                        placeholder="Load"
-                                    />
-                                    <Input
-                                        value={set.text || ""}
-                                        onChange={(e) => updateSetInBlock(index, si, 'text', e.target.value)}
-                                        className="h-10 bg-black/20 text-base border-white/5 flex-1 min-w-[100px]"
-                                        placeholder="Notes..."
-                                    />
-                                </>
-                            )}
+                            </div>
 
-                            <button onClick={() => removeSetFromBlock(index, si)} className="text-muted-foreground hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1">
-                                <X className="h-3 w-3" />
+                            <button onClick={() => removeSetFromBlock(index, si)} className="text-muted-foreground hover:text-red-500 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity p-2">
+                                <X className="h-4 w-4" />
                             </button>
                         </div>
                     ))}
