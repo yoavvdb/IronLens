@@ -1246,7 +1246,7 @@ export default function DashboardPage() {
                                                                                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                                                                             className="border-t border-white/5 bg-black/30 p-4"
                                                                                         >
-                                                                                            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                                                                                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                                                                                                 {data.userLogs.map((log) => {
                                                                                                     const showThumbnail = !!log.thumbnail_url;
                                                                                                     return (
@@ -1427,7 +1427,7 @@ export default function DashboardPage() {
                                                                                 exit={{ height: 0, opacity: 0 }}
                                                                                 className="border-t border-white/5 bg-black/30 p-3"
                                                                             >
-                                                                                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                                                                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
                                                                                     {data.userLogs.map((log) => (
                                                                                         <div
                                                                                             key={log.id}
