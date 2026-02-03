@@ -1440,7 +1440,9 @@ export default function DashboardPage() {
                                                                                                 ) : log.video_url && (
                                                                                                     <video src={log.video_url} className="w-full h-full object-cover" />
                                                                                                 )}
-                                                                                                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
+                                                                                                <h1 className="text-xl font-bold bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+                                                                                                    IronLens <span className="text-xs text-yellow-500 font-mono border border-yellow-500/30 px-1 rounded">v2.1</span>
+                                                                                                </h1>                                                                                                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
                                                                                                 <div className="absolute inset-0 flex items-center justify-center p-2">
                                                                                                     <div className="text-lg font-black text-white italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-none">
                                                                                                         {log.result_score}

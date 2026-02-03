@@ -621,6 +621,9 @@ video {
 .pointer-events-auto {
   pointer-events: auto;
 }
+.visible {
+  visibility: visible;
+}
 .fixed {
   position: fixed;
 }
@@ -875,6 +878,18 @@ video {
 .max-h-\[90vh\] {
   max-height: 90vh;
 }
+.max-h-60 {
+  max-height: 15rem;
+}
+.max-h-\[60dvh\] {
+  max-height: 60dvh;
+}
+.max-h-\[75dvh\] {
+  max-height: 75dvh;
+}
+.max-h-\[90dvh\] {
+  max-height: 90dvh;
+}
 .min-h-screen {
   min-height: 100vh;
 }
@@ -957,6 +972,12 @@ video {
   min-width: -moz-max-content;
   min-width: max-content;
 }
+.min-w-\[100px\] {
+  min-width: 100px;
+}
+.min-w-\[150px\] {
+  min-width: 150px;
+}
 .max-w-\[100px\] {
   max-width: 100px;
 }
@@ -1022,6 +1043,9 @@ video {
 .flex-col {
   flex-direction: column;
 }
+.flex-wrap {
+  flex-wrap: wrap;
+}
 .items-start {
   align-items: flex-start;
 }
@@ -1033,6 +1057,9 @@ video {
 }
 .items-baseline {
   align-items: baseline;
+}
+.justify-start {
+  justify-content: flex-start;
 }
 .justify-center {
   justify-content: center;
@@ -1390,6 +1417,9 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(9 9 11 / var(--tw-bg-opacity, 1));
 }
+.bg-yellow-500\/20 {
+  background-color: rgb(234 179 8 / 0.2);
+}
 .bg-gradient-to-b {
   background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
@@ -1427,6 +1457,11 @@ video {
   --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
+.from-white {
+  --tw-gradient-from: #fff var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
 .via-transparent {
   --tw-gradient-to: rgb(0 0 0 / 0)  var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), transparent var(--tw-gradient-via-position), var(--tw-gradient-to);
@@ -1439,6 +1474,13 @@ video {
 }
 .to-transparent {
   --tw-gradient-to: transparent var(--tw-gradient-to-position);
+}
+.to-white\/60 {
+  --tw-gradient-to: rgb(255 255 255 / 0.6) var(--tw-gradient-to-position);
+}
+.bg-clip-text {
+  -webkit-background-clip: text;
+          background-clip: text;
 }
 .fill-primary {
   fill: hsl(var(--primary));
@@ -1563,6 +1605,12 @@ video {
 .pt-4 {
   padding-top: 1rem;
 }
+.pb-40 {
+  padding-bottom: 10rem;
+}
+.pb-0 {
+  padding-bottom: 0px;
+}
 .text-center {
   text-align: center;
 }
@@ -1607,6 +1655,10 @@ video {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 .font-black {
   font-weight: 900;
@@ -1733,6 +1785,13 @@ video {
   --tw-text-opacity: 1;
   color: rgb(212 212 216 / var(--tw-text-opacity, 1));
 }
+.text-yellow-200 {
+  --tw-text-opacity: 1;
+  color: rgb(254 240 138 / var(--tw-text-opacity, 1));
+}
+.text-transparent {
+  color: transparent;
+}
 .underline {
   text-decoration-line: underline;
 }
@@ -1754,6 +1813,12 @@ video {
 }
 .opacity-80 {
   opacity: 0.8;
+}
+.opacity-100 {
+  opacity: 1;
+}
+.opacity-50 {
+  opacity: 0.5;
 }
 .shadow-2xl {
   --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
@@ -2070,6 +2135,10 @@ video {
   background-color: hsl(var(--primary) / 0.1);
 }
 
+.hover\:bg-yellow-500\/30:hover {
+  background-color: rgb(234 179 8 / 0.3);
+}
+
 .hover\:text-accent-foreground:hover {
   color: hsl(var(--accent-foreground));
 }
@@ -2245,12 +2314,36 @@ video {
     grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .sm\:text-left {
     text-align: left;
   }
 }
 
 @media (min-width: 768px) {
+
+  .md\:mb-0 {
+    margin-bottom: 0px;
+  }
+
+  .md\:flex {
+    display: flex;
+  }
+
+  .md\:hidden {
+    display: none;
+  }
+
+  .md\:w-auto {
+    width: auto;
+  }
+
+  .md\:flex-1 {
+    flex: 1 1 0%;
+  }
 
   .md\:grid-cols-10 {
     grid-template-columns: repeat(10, minmax(0, 1fr));
@@ -2262,5 +2355,25 @@ video {
 
   .md\:grid-cols-5 {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .md\:flex-nowrap {
+    flex-wrap: nowrap;
+  }
+
+  .md\:border-0 {
+    border-width: 0px;
+  }
+
+  .md\:pb-0 {
+    padding-bottom: 0px;
+  }
+
+  .md\:opacity-0 {
+    opacity: 0;
   }
 }
