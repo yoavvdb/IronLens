@@ -1554,6 +1554,10 @@ export default function DashboardPage() {
                                     <Button className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
                                         {isSubmitting ? "Updating..." : "Update Set"}
                                     </Button>
+
+                                    <Button variant="destructive" className="w-full" onClick={handleDeleteLog} disabled={isSubmitting}>
+                                        <Trash2 className="mr-2 h-4 w-4" /> Delete Log
+                                    </Button>
                                 </div>
                             ) : (
                                 // --- CREATE MULTI-SET MODE ---

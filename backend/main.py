@@ -679,6 +679,50 @@ def mark_notifications_read(payload: MarkRead):
             c.execute("UPDATE notifications SET is_read = 1 WHERE id = ?", (nid,))
     return {"status": "success"}
 
+@app.delete("/logs/{log_id}")
+def delete_log(log_id: str, user_id: str = Query(...)):
+    with get_db() as conn:
+        c = conn.cursor()
+        
+        # Check ownership
+        c.execute("SELECT user_id, video_filename, thumbnail_filename FROM logs WHERE id = ?", (log_id,))
+        row = c.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Log not found")
+            
+        # Handle dict/row access safely
+        db_user_id = row['user_id']
+        video_file = row['video_filename']
+        thumb_file = row['thumbnail_filename']
+
+        if db_user_id != user_id:
+            raise HTTPException(status_code=403, detail="Not authorized to delete this log")
+            
+        # Delete files if they exist
+        if video_file:
+            path = os.path.join(UPLOAD_DIR, video_file)
+            if os.path.exists(path):
+                try:
+                    os.remove(path)
+                except:
+                    pass
+                    
+        if thumb_file:
+            path = os.path.join(UPLOAD_DIR, thumb_file)
+            if os.path.exists(path):
+                try:
+                    os.remove(path)
+                except:
+                    pass
+
+        # Cascade delete
+        c.execute("DELETE FROM comments WHERE log_id = ?", (log_id,))
+        c.execute("DELETE FROM kudos WHERE log_id = ?", (log_id,))
+        c.execute("DELETE FROM logs WHERE id = ?", (log_id,))
+        
+    return {"status": "success"}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
