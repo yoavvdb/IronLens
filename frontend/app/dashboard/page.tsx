@@ -1034,7 +1034,7 @@ export default function DashboardPage() {
                                                                 </div>
                                                             ) : (
                                                                 <div className="flex flex-col gap-0.5">
-                                                                    {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').slice(0, 3).map((set, idx) => {
+                                                                    {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').map((set, idx) => {
                                                                         const isNote = set.type?.toLowerCase() === 'note';
                                                                         return (
                                                                             <div key={idx} className="text-white flex items-center gap-2">
@@ -1051,9 +1051,6 @@ export default function DashboardPage() {
                                                                             </div>
                                                                         )
                                                                     })}
-                                                                    {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').length > 3 && (
-                                                                        <span className="text-xs text-muted-foreground">+{block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').length - 3} more</span>
-                                                                    )}
                                                                 </div>
                                                             )}
                                                         </div>
@@ -1126,58 +1123,21 @@ export default function DashboardPage() {
                                                     animate={{ height: "auto", opacity: 1 }}
                                                     exit={{ height: 0, opacity: 0 }}
                                                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                                    className="border-t border-white/5 bg-background/50 overflow-hidden"
-                                                >
-                                                    {/* Workout Details */}
-                                                    <div className="p-6">
-                                                        <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2 mb-4">
-                                                            <Dumbbell className="h-3 w-3" /> Workout Details
-                                                        </h4>
-                                                        {isMetcon ? (
-                                                            <div className="font-mono text-sm text-zinc-200 whitespace-pre-wrap leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5">
-                                                                {block.description || "No details available."}
-                                                            </div>
-                                                        ) : (
-                                                            <div className="grid grid-cols-1 gap-2">
-                                                                {block.data.map((set, idx) => {
-                                                                    const isNote = set.type?.toLowerCase() === 'note';
-                                                                    return (
-                                                                        <div key={idx} className={cn(
-                                                                            "flex flex-col p-3 rounded-xl border",
-                                                                            isNote ? "bg-yellow-500/10 border-yellow-500/20" : "bg-white/5 border-white/5"
-                                                                        )}>
-                                                                            {/* Header Row: Type & Main Stats */}
-                                                                            <div className="flex items-center justify-between">
-                                                                                <span className={cn(
-                                                                                    "text-[10px] font-bold uppercase tracking-wider",
-                                                                                    isNote ? "text-yellow-500" : "text-muted-foreground"
-                                                                                )}>
-                                                                                    {set.type}
-                                                                                </span>
-
-                                                                                {!isNote && set.type?.toLowerCase() !== 'movement' && (
-                                                                                    <div className="flex items-center gap-3">
-                                                                                        <span className="text-sm font-medium text-white">{set.reps} Reps</span>
-                                                                                        <span className="text-sm font-mono text-primary font-bold">{set.weight}</span>
-                                                                                    </div>
-                                                                                )}
-                                                                            </div>
-
-                                                                            {/* Content Row: Text / Note */}
-                                                                            {set.text && (
-                                                                                <div className={cn(
-                                                                                    "mt-1 text-sm leading-snug",
-                                                                                    isNote ? "text-yellow-200 font-medium" : "text-muted-foreground italic"
-                                                                                )}>
-                                                                                    {set.type?.toLowerCase() === 'movement' ? set.text : `// ${set.text}`}
-                                                                                </div>
-                                                                            )}
-                                                                        </div>
-                                                                    )
-                                                                })}
+                                                    <div className="border-t border-white/5 bg-background/50 overflow-hidden">
+                                                        {/* Metcon Description (Still valuable to show fully if expanding) */}
+                                                        {isMetcon && (
+                                                            <div className="p-6 pb-0">
+                                                                <h4 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2 mb-4">
+                                                                    <Dumbbell className="h-3 w-3" /> Workout Details
+                                                                </h4>
+                                                                <div className="font-mono text-sm text-zinc-200 whitespace-pre-wrap leading-relaxed bg-white/5 p-4 rounded-xl border border-white/5">
+                                                                    {block.description || "No details available."}
+                                                                </div>
                                                             </div>
                                                         )}
-                                                    </div>
+                                                        
+                                                        {/* NOTE: Strength sets are now fully visible in the collapsed card body, so we hide them here to avoid duplication. */}
+
 
                                                     {/* Community Activity / Leaderboard */}
                                                     <div className="px-6 pb-6">
