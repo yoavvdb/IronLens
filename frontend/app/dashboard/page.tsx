@@ -1506,424 +1506,423 @@ export default function DashboardPage() {
             </main>
 
             {/* Create/Edit Log Drawer */}
-            <div className="fixed bottom-8 left-6 right-6 z-30">
-                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-                    <DrawerContent className="bg-background border-t border-white/10">
-                        <div className="mx-auto w-full max-w-sm">
-                            <DrawerHeader>
-                                <DrawerTitle>{editingLogId ? "Edit Set" : `Log - ${title}`}</DrawerTitle>
-                            </DrawerHeader>
-                            <div className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
+            <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+                <DrawerContent className="bg-background border-t border-white/10 max-h-[90dvh]">
+                    <div className="mx-auto w-full max-w-sm">
+                        <DrawerHeader>
+                            <DrawerTitle>{editingLogId ? "Edit Set" : `Log - ${title}`}</DrawerTitle>
+                        </DrawerHeader>
+                        <div className="p-6 max-h-[75dvh] overflow-y-auto space-y-6 pb-40">
 
-                                {editingLogId ? (
-                                    // --- EDIT SINGLE LOG MODE ---
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-muted-foreground">RESULT</label>
+                            {editingLogId ? (
+                                // --- EDIT SINGLE LOG MODE ---
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-muted-foreground">RESULT</label>
+                                        <Input
+                                            placeholder="e.g. 100kg"
+                                            value={editResult}
+                                            onChange={e => setEditResult(e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-bold text-muted-foreground">VIDEO</label>
+                                        <div className="flex items-center gap-2 mb-2">
                                             <Input
-                                                placeholder="e.g. 100kg"
-                                                value={editResult}
-                                                onChange={e => setEditResult(e.target.value)}
+                                                type="file"
+                                                accept="video/*"
+                                                onChange={e => { setEditFile(e.target.files?.[0] || null); setRemoveVideo(false) }}
+                                                disabled={removeVideo}
                                             />
                                         </div>
 
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-muted-foreground">VIDEO</label>
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Input
-                                                    type="file"
-                                                    accept="video/*"
-                                                    onChange={e => { setEditFile(e.target.files?.[0] || null); setRemoveVideo(false) }}
-                                                    disabled={removeVideo}
-                                                />
-                                            </div>
-
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="removeVideo"
-                                                    checked={removeVideo}
-                                                    onChange={e => setRemoveVideo(e.target.checked)}
-                                                    className="rounded border-white/20 bg-muted"
-                                                />
-                                                <label htmlFor="removeVideo" className="text-xs text-red-400">Remove existing video</label>
-                                            </div>
-                                        </div>
-
-                                        <Button className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
-                                            {isSubmitting ? "Updating..." : "Update Set"}
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    // --- CREATE MULTI-SET MODE ---
-                                    <div className="space-y-4">
-                                        {inputSets.map((set, index) => (
-                                            <div key={set.id} className="p-3 bg-muted/10 rounded-xl border border-white/5 space-y-3 relative">
-                                                <div className="flex justify-between items-center">
-                                                    <span className="text-xs font-bold text-muted-foreground">SET {index + 1}</span>
-                                                    {inputSets.length > 1 && (
-                                                        <button onClick={() => removeSet(index)} className="text-muted-foreground hover:text-red-500">
-                                                            <Trash2 className="h-3 w-3" />
-                                                        </button>
-                                                    )}
-                                                </div>
-                                                <Input
-                                                    placeholder="Result (e.g. 10 reps)"
-                                                    value={set.result}
-                                                    onChange={e => updateSet(index, 'result', e.target.value)}
-                                                />
-                                                <Input
-                                                    type="file"
-                                                    accept="video/*"
-                                                    onChange={e => updateSet(index, 'file', e.target.files?.[0] || null)}
-                                                />
-                                            </div>
-                                        ))}
-
-                                        <Button variant="outline" className="w-full border-dashed" onClick={addSet}>
-                                            <Plus className="mr-2 h-4 w-4" /> Add Another Set
-                                        </Button>
-
-                                        <Button className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
-                                            {isSubmitting ? "Saving All..." : "Save Logs"}
-                                        </Button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </DrawerContent>
-                </Drawer>
-            </div>
-
-            {/* View Detail Drawer (Comments/Video) */}
-            <div className="fixed inset-0 z-40 pointer-events-none">
-                <Drawer open={detailDrawerOpen} onOpenChange={setDetailDrawerOpen}>
-                    <DrawerContent className="bg-background border-t border-white/10 max-h-[90vh] pointer-events-auto">
-                        {viewingLog && (
-                            <div className="mx-auto w-full max-w-md flex flex-col h-full">
-                                <div className="p-4 border-b border-white/10 flex items-center justify-between bg-black/20">
-                                    <div className="flex items-center gap-3">
-                                        <div className="h-8 w-8 rounded-full bg-slate-700 overflow-hidden">
-                                            <img src={viewingLog.user_avatar} className="h-full w-full" />
-                                        </div>
-                                        <div>
-                                            <h4 className="font-bold text-sm text-white">{viewingLog.user_name}</h4>
-                                            <p className="text-xs text-muted-foreground">Session Analysis • {viewingLog.title}</p>
+                                        <div className="flex items-center gap-2">
+                                            <input
+                                                type="checkbox"
+                                                id="removeVideo"
+                                                checked={removeVideo}
+                                                onChange={e => setRemoveVideo(e.target.checked)}
+                                                className="rounded border-white/20 bg-muted"
+                                            />
+                                            <label htmlFor="removeVideo" className="text-xs text-red-400">Remove existing video</label>
                                         </div>
                                     </div>
-                                    <Button
-                                        size="sm"
-                                        variant="ghost"
-                                        onClick={() => handleKudos(viewingLog.id)}
-                                        className={cn(
-                                            "transition-all duration-300",
-                                            viewingLog.kudos_count > 0 ? "text-primary hover:bg-primary/10 shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-pulse" : "text-muted-foreground"
-                                        )}
-                                    >
-                                        <ThumbsUp className={cn("h-4 w-4 mr-2", viewingLog.kudos_count > 0 && "fill-primary")} />
-                                        {viewingLog.kudos_count > 0 ? `${viewingLog.kudos_count} KUDOS` : "KUDOS"}
+
+                                    <Button className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
+                                        {isSubmitting ? "Updating..." : "Update Set"}
                                     </Button>
                                 </div>
-
-                                <div className="flex-1 overflow-y-auto p-4 space-y-6">
-                                    {/* Selected Video Player */}
-                                    {viewingLog.video_url && (
-                                        <div className="rounded-xl overflow-hidden bg-black aspect-video border border-white/10 relative shadow-2xl flex items-center justify-center">
-                                            <canvas ref={canvasRef} className="hidden" />
-                                            <video
-                                                ref={videoRef}
-                                                src={viewingLog.video_url}
-                                                className="w-full h-full object-contain"
-                                                controls
-                                                autoPlay
-                                                playsInline
-                                                crossOrigin="anonymous"
-                                            />
-
-                                            {/* Frame Capture Button (Coach Only) */}
-                                            {currentUser?.role === 'coach' && (
-                                                <button
-                                                    onClick={handleCaptureFrame}
-                                                    className="absolute bottom-16 right-4 sm:bottom-4 px-3 py-1.5 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs rounded-full shadow-lg flex items-center gap-1 z-20 transition-transform active:scale-95"
-                                                >
-                                                    <Camera className="h-3 w-3" /> Snap Frame
-                                                </button>
-                                            )}
-
-                                            <div className="absolute top-4 left-4 px-3 py-1 bg-black/70 backdrop-blur rounded text-sm font-bold text-white z-10">
-                                                {viewingLog.result_score}
+                            ) : (
+                                // --- CREATE MULTI-SET MODE ---
+                                <div className="space-y-4">
+                                    {inputSets.map((set, index) => (
+                                        <div key={set.id} className="p-3 bg-muted/10 rounded-xl border border-white/5 space-y-3 relative">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs font-bold text-muted-foreground">SET {index + 1}</span>
+                                                {inputSets.length > 1 && (
+                                                    <button onClick={() => removeSet(index)} className="text-muted-foreground hover:text-red-500">
+                                                        <Trash2 className="h-3 w-3" />
+                                                    </button>
+                                                )}
                                             </div>
+                                            <Input
+                                                placeholder="Result (e.g. 10 reps)"
+                                                value={set.result}
+                                                onChange={e => updateSet(index, 'result', e.target.value)}
+                                            />
+                                            <Input
+                                                type="file"
+                                                accept="video/*"
+                                                onChange={e => updateSet(index, 'file', e.target.files?.[0] || null)}
+                                            />
                                         </div>
-                                    )}
+                                    ))}
 
-                                    {/* Session Strip (Other Sets) */}
-                                    <div className="space-y-2">
-                                        <h5 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Session Sets</h5>
-                                        <div className="flex gap-2 overflow-x-auto pb-2">
-                                            {sessionLogs.map(l => (
-                                                <button
-                                                    key={l.id}
-                                                    onClick={() => setViewingLog(l)}
-                                                    className={cn(
-                                                        "relative h-16 w-12 rounded overflow-hidden border shrink-0 transition-all",
-                                                        viewingLog.id === l.id ? "border-primary ring-1 ring-primary" : "border-white/10 hover:border-white/30"
-                                                    )}
-                                                >
-                                                    {l.thumbnail_url ? (
-                                                        <img src={l.thumbnail_url} className="h-full w-full object-cover" />
-                                                    ) : (
-                                                        <div className="h-full w-full bg-muted flex items-center justify-center"><VideoOff className="h-3 w-3" /></div>
-                                                    )}
-                                                    <div className="absolute bottom-0 inset-x-0 bg-black/60 text-[8px] text-center text-white py-0.5 truncate">
-                                                        {l.result_score}
-                                                    </div>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
+                                    <Button variant="outline" className="w-full border-dashed" onClick={addSet}>
+                                        <Plus className="mr-2 h-4 w-4" /> Add Another Set
+                                    </Button>
 
-                                    {/* Unified Session Comments */}
-                                    <div className="space-y-3 pb-20">
-                                        <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Session Discussion</h4>
-                                        {sessionLogs.flatMap(l => l.comments).length === 0 ? (
-                                            <p className="text-sm text-muted-foreground italic">No comments yet.</p>
-                                        ) : (
-                                            sessionLogs.flatMap(l => l.comments)
-                                                .sort((a, b) => {
-                                                    // Sort: Coach first, then chronological
-                                                    if (a.is_coach_feedback !== b.is_coach_feedback) return a.is_coach_feedback ? -1 : 1;
-                                                    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-                                                })
-                                                .map(c => (
-                                                    <div key={c.id} className={cn("text-sm p-4 rounded-xl", c.is_coach_feedback ? "border-l-4 border-yellow-500 bg-yellow-500/10" : "bg-white/5")}>
-                                                        <div className="flex justify-between items-start mb-2">
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="h-6 w-6 rounded-full bg-slate-700 overflow-hidden">
-                                                                    <img src={c.user_avatar} className="h-full w-full" />
-                                                                </div>
-                                                                <span className={cn("font-bold text-xs", c.is_coach_feedback ? "text-yellow-500 uppercase tracking-wider" : "text-white")}>
-                                                                    {c.user_name}
-                                                                    {c.is_coach_feedback && <span className="ml-2 text-[8px] bg-yellow-500 text-black px-1 rounded-sm">COACH</span>}
-                                                                </span>
-                                                            </div>
-                                                            <span className="text-[10px] text-muted-foreground">{new Date(c.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                                                        </div>
-
-                                                        {/* Text Content */}
-                                                        <p className={cn("ml-8", c.is_coach_feedback ? "text-white font-medium" : "text-muted-foreground")}>{c.text}</p>
-
-                                                        {/* Image Attachment */}
-                                                        {/* @ts-ignore */}
-                                                        {c.image_url && (
-                                                            <div className="ml-8 mt-2 rounded-lg overflow-hidden border border-white/10 w-48 shadow-lg cursor-pointer hover:opacity-90 transition-opacity">
-                                                                {/* @ts-ignore */}
-                                                                <img src={c.image_url} alt="Feedback" className="w-full h-auto" />
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                ))
-                                        )}
-                                    </div>
+                                    <Button className="w-full" onClick={handleSubmit} disabled={isSubmitting}>
+                                        {isSubmitting ? "Saving All..." : "Save Logs"}
+                                    </Button>
                                 </div>
+                            )}
+                        </div>
+                    </div>
+                </DrawerContent>
+            </Drawer>
+        </div>
 
-                                {/* Add Comment Footer */}
-                                <div className="p-4 border-t border-white/10 bg-background pb-8 flex flex-col gap-3">
-                                    {/* Image Preview */}
-                                    {commentImagePreview && (
-                                        <div className="relative w-32 h-20 rounded-lg overflow-hidden border border-yellow-500/50 group">
-                                            <img src={commentImagePreview} className="w-full h-full object-cover" />
-                                            <button onClick={() => { setCommentImage(null); setCommentImagePreview(null) }} className="absolute top-1 right-1 p-1 bg-black/50 text-white rounded-full hover:bg-red-500"><X className="h-3 w-3" /></button>
-                                        </div>
-                                    )}
-
-                                    <div className="flex gap-2">
-                                        <Input
-                                            value={commentText}
-                                            onChange={(e) => setCommentText(e.target.value)}
-                                            placeholder={currentUser?.role === 'coach' ? "Coach feedback..." : "Add a comment..."}
-                                            className={cn("h-10 bg-muted/20", currentUser?.role === 'coach' && "border-yellow-500/30 focus-visible:ring-yellow-500 font-medium")}
-                                            onKeyDown={(e) => e.key === 'Enter' && handleComment()}
-                                        />
-                                        <Button size="icon" onClick={handleComment} disabled={!commentText.trim() && !commentImage} className={cn(currentUser?.role === 'coach' ? "bg-yellow-500 text-black hover:bg-yellow-400" : "")}>
-                                            <MessageSquare className="h-4 w-4" />
-                                        </Button>
-                                    </div>
+            {/* View Detail Drawer (Comments/Video) */ }
+    <div className="fixed inset-0 z-40 pointer-events-none">
+        <Drawer open={detailDrawerOpen} onOpenChange={setDetailDrawerOpen}>
+            <DrawerContent className="bg-background border-t border-white/10 max-h-[90vh] pointer-events-auto">
+                {viewingLog && (
+                    <div className="mx-auto w-full max-w-md flex flex-col h-full">
+                        <div className="p-4 border-b border-white/10 flex items-center justify-between bg-black/20">
+                            <div className="flex items-center gap-3">
+                                <div className="h-8 w-8 rounded-full bg-slate-700 overflow-hidden">
+                                    <img src={viewingLog.user_avatar} className="h-full w-full" />
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-sm text-white">{viewingLog.user_name}</h4>
+                                    <p className="text-xs text-muted-foreground">Session Analysis • {viewingLog.title}</p>
                                 </div>
                             </div>
-                        )}
-                    </DrawerContent>
-                </Drawer>
-            </div>
-
-            {/* Coach Search Drawer */}
-            <Drawer open={isCoachSearchOpen} onOpenChange={setIsCoachSearchOpen}>
-                <DrawerContent className="bg-zinc-950 border-white/10 max-h-[85vh]">
-                    <DrawerHeader>
-                        <DrawerTitle className="text-xl font-bold italic">FIND A COACH</DrawerTitle>
-                    </DrawerHeader>
-                    <div className="p-6 space-y-6">
-                        <div className="flex gap-2">
-                            <Input
-                                placeholder="Search by name..."
-                                value={coachSearchQuery}
-                                onChange={(e) => setCoachSearchQuery(e.target.value)}
-                                className="bg-white/5 border-white/10"
-                                onKeyDown={(e) => e.key === 'Enter' && handleSearchCoaches()}
-                            />
-                            <Button onClick={handleSearchCoaches}>
-                                <Search className="h-4 w-4" />
+                            <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleKudos(viewingLog.id)}
+                                className={cn(
+                                    "transition-all duration-300",
+                                    viewingLog.kudos_count > 0 ? "text-primary hover:bg-primary/10 shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-pulse" : "text-muted-foreground"
+                                )}
+                            >
+                                <ThumbsUp className={cn("h-4 w-4 mr-2", viewingLog.kudos_count > 0 && "fill-primary")} />
+                                {viewingLog.kudos_count > 0 ? `${viewingLog.kudos_count} KUDOS` : "KUDOS"}
                             </Button>
                         </div>
 
-                        <div className="space-y-3 max-h-[50vh] overflow-y-auto">
-                            {foundCoaches.length === 0 ? (
-                                <p className="text-center text-muted-foreground py-10 text-sm italic">Search to find coaches and follow their programming.</p>
-                            ) : (
-                                foundCoaches.map(coach => (
-                                    <div key={coach.id} className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-10 w-10 rounded-full overflow-hidden bg-slate-700">
-                                                <img src={coach.avatar_url} className="h-full w-full object-cover" />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-bold text-white leading-tight">{coach.name}</h4>
-                                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Certified Coach</p>
-                                            </div>
-                                        </div>
+                        <div className="flex-1 overflow-y-auto p-4 space-y-6">
+                            {/* Selected Video Player */}
+                            {viewingLog.video_url && (
+                                <div className="rounded-xl overflow-hidden bg-black aspect-video border border-white/10 relative shadow-2xl flex items-center justify-center">
+                                    <canvas ref={canvasRef} className="hidden" />
+                                    <video
+                                        ref={videoRef}
+                                        src={viewingLog.video_url}
+                                        className="w-full h-full object-contain"
+                                        controls
+                                        autoPlay
+                                        playsInline
+                                        crossOrigin="anonymous"
+                                    />
 
-                                        {isJoiningCoach?.id === coach.id ? (
-                                            <div className="flex items-center gap-2">
-                                                <Input
-                                                    placeholder="Code"
-                                                    value={accessCodeInput}
-                                                    onChange={(e) => setAccessCodeInput(e.target.value)}
-                                                    className="w-24 h-8 text-xs outline-primary border-primary/50 text-center"
-                                                    type="password"
-                                                />
-                                                <Button size="sm" onClick={handleJoinCoach} className="h-8 bg-primary text-black hover:bg-primary/90 font-bold px-4">
-                                                    JOIN
-                                                </Button>
-                                            </div>
-                                        ) : (
-                                            <Button
-                                                size="sm"
-                                                variant="secondary"
-                                                onClick={() => setIsJoiningCoach(coach)}
-                                                className="bg-primary/10 hover:bg-primary text-primary hover:text-black border border-primary/20 font-bold"
-                                            >
-                                                FOLLOW
-                                            </Button>
-                                        )}
+                                    {/* Frame Capture Button (Coach Only) */}
+                                    {currentUser?.role === 'coach' && (
+                                        <button
+                                            onClick={handleCaptureFrame}
+                                            className="absolute bottom-16 right-4 sm:bottom-4 px-3 py-1.5 bg-yellow-500 hover:bg-yellow-400 text-black font-bold text-xs rounded-full shadow-lg flex items-center gap-1 z-20 transition-transform active:scale-95"
+                                        >
+                                            <Camera className="h-3 w-3" /> Snap Frame
+                                        </button>
+                                    )}
+
+                                    <div className="absolute top-4 left-4 px-3 py-1 bg-black/70 backdrop-blur rounded text-sm font-bold text-white z-10">
+                                        {viewingLog.result_score}
                                     </div>
-                                ))
+                                </div>
                             )}
-                        </div>
-                    </div>
-                </DrawerContent>
-            </Drawer>
 
-            {/* Coach Access Code Settings Drawer */}
-            <Drawer open={isSettingAccessCode} onOpenChange={setIsSettingAccessCode}>
-                <DrawerContent className="bg-zinc-950 border-white/10">
-                    <DrawerHeader>
-                        <DrawerTitle className="text-xl font-bold italic">PROGRAMMING ACCESS CODE</DrawerTitle>
-                    </DrawerHeader>
-                    <div className="p-6 space-y-4">
-                        <p className="text-xs text-muted-foreground">
-                            Set a unique password for your coaching. People who want to access your specific training will need to enter this code.
-                        </p>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Your Code</label>
-                            <Input
-                                placeholder="Enter a code (e.g. IRON123)"
-                                value={newAccessCode}
-                                onChange={(e) => setNewAccessCode(e.target.value)}
-                                className="bg-white/5 border-white/10 text-lg font-mono tracking-widest text-primary"
-                            />
-                        </div>
-                        <Button className="w-full bg-primary text-black hover:bg-primary/90 font-bold" onClick={handleUpdateAccessCode}>
-                            SAVE ACCESS CODE
-                        </Button>
-                        <p className="text-[10px] text-muted-foreground text-center italic">
-                            Leave empty to make your programming public to anyone who finds you.
-                        </p>
-                    </div>
-                </DrawerContent>
-            </Drawer>
-
-            {/* Mobile Navigation Drawer */}
-            <Drawer open={menuOpen} onOpenChange={setMenuOpen}>
-                <DrawerContent className="bg-background border-t border-white/10">
-                    <div className="mx-auto w-full max-w-sm p-6 space-y-6">
-                        {/* Profile Header */}
-                        <div className="flex items-center gap-4 pb-6 border-b border-white/10">
-                            <div className="h-12 w-12 rounded-full overflow-hidden bg-muted border-2 border-white/10">
-                                <img src={currentUser.avatar_url} className="h-full w-full object-cover" />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-bold text-white">{currentUser.name}</h3>
-                                <p className="text-xs text-muted-foreground uppercase">{currentUser.role === 'coach' ? 'Coach' : 'Athlete'}</p>
-                            </div>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="space-y-2">
-                            {/* Notifications Item */}
-                            <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                                <span className="text-sm font-medium">Notifications</span>
-                                <div className="flex items-center gap-2">
-                                    {unreadCount > 0 && <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 rounded-full">{unreadCount}</span>}
-                                    <Popover open={notifOpen} onOpenChange={setNotifOpen}>
-                                        <PopoverTrigger asChild>
-                                            <Button size="sm" variant="ghost" className="h-8"><Bell className="h-4 w-4" /></Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-80 p-0 bg-zinc-950 border-white/10" align="end">
-                                            <div className="p-3 border-b border-white/10 font-bold text-sm">Notifications</div>
-                                            <div className="max-h-60 overflow-y-auto">
-                                                {notifications.length === 0 ? <div className="p-4 text-xs text-muted-foreground">None</div> : notifications.map(n => (
-                                                    <div key={n.id} className="p-3 border-b border-white/5 text-xs text-white">{n.message}</div>
-                                                ))}
+                            {/* Session Strip (Other Sets) */}
+                            <div className="space-y-2">
+                                <h5 className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Session Sets</h5>
+                                <div className="flex gap-2 overflow-x-auto pb-2">
+                                    {sessionLogs.map(l => (
+                                        <button
+                                            key={l.id}
+                                            onClick={() => setViewingLog(l)}
+                                            className={cn(
+                                                "relative h-16 w-12 rounded overflow-hidden border shrink-0 transition-all",
+                                                viewingLog.id === l.id ? "border-primary ring-1 ring-primary" : "border-white/10 hover:border-white/30"
+                                            )}
+                                        >
+                                            {l.thumbnail_url ? (
+                                                <img src={l.thumbnail_url} className="h-full w-full object-cover" />
+                                            ) : (
+                                                <div className="h-full w-full bg-muted flex items-center justify-center"><VideoOff className="h-3 w-3" /></div>
+                                            )}
+                                            <div className="absolute bottom-0 inset-x-0 bg-black/60 text-[8px] text-center text-white py-0.5 truncate">
+                                                {l.result_score}
                                             </div>
-                                        </PopoverContent>
-                                    </Popover>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
 
-                            {currentUser.role === 'athlete' && !currentUser.followed_coach_id && (
-                                <Button
-                                    variant="outline"
-                                    className="w-full justify-start h-12 text-sm font-bold"
-                                    onClick={() => { setMenuOpen(false); setIsCoachSearchOpen(true); }}
-                                >
-                                    <Plus className="mr-2 h-4 w-4" /> FIND A COACH
-                                </Button>
-                            )}
+                            {/* Unified Session Comments */}
+                            <div className="space-y-3 pb-20">
+                                <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Session Discussion</h4>
+                                {sessionLogs.flatMap(l => l.comments).length === 0 ? (
+                                    <p className="text-sm text-muted-foreground italic">No comments yet.</p>
+                                ) : (
+                                    sessionLogs.flatMap(l => l.comments)
+                                        .sort((a, b) => {
+                                            // Sort: Coach first, then chronological
+                                            if (a.is_coach_feedback !== b.is_coach_feedback) return a.is_coach_feedback ? -1 : 1;
+                                            return new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+                                        })
+                                        .map(c => (
+                                            <div key={c.id} className={cn("text-sm p-4 rounded-xl", c.is_coach_feedback ? "border-l-4 border-yellow-500 bg-yellow-500/10" : "bg-white/5")}>
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="h-6 w-6 rounded-full bg-slate-700 overflow-hidden">
+                                                            <img src={c.user_avatar} className="h-full w-full" />
+                                                        </div>
+                                                        <span className={cn("font-bold text-xs", c.is_coach_feedback ? "text-yellow-500 uppercase tracking-wider" : "text-white")}>
+                                                            {c.user_name}
+                                                            {c.is_coach_feedback && <span className="ml-2 text-[8px] bg-yellow-500 text-black px-1 rounded-sm">COACH</span>}
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-[10px] text-muted-foreground">{new Date(c.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                                </div>
 
-                            {currentUser.role === 'athlete' && currentUser.followed_coach_id && (
-                                <div className="flex items-center justify-between p-3 rounded-lg bg-primary/10 border border-primary/20">
-                                    <span className="text-sm font-bold text-primary">Coach Connected</span>
-                                    <button onClick={handleUnfollowCoach} className="text-xs text-muted-foreground underline">Unfollow</button>
+                                                {/* Text Content */}
+                                                <p className={cn("ml-8", c.is_coach_feedback ? "text-white font-medium" : "text-muted-foreground")}>{c.text}</p>
+
+                                                {/* Image Attachment */}
+                                                {/* @ts-ignore */}
+                                                {c.image_url && (
+                                                    <div className="ml-8 mt-2 rounded-lg overflow-hidden border border-white/10 w-48 shadow-lg cursor-pointer hover:opacity-90 transition-opacity">
+                                                        {/* @ts-ignore */}
+                                                        <img src={c.image_url} alt="Feedback" className="w-full h-auto" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Add Comment Footer */}
+                        <div className="p-4 border-t border-white/10 bg-background pb-8 flex flex-col gap-3">
+                            {/* Image Preview */}
+                            {commentImagePreview && (
+                                <div className="relative w-32 h-20 rounded-lg overflow-hidden border border-yellow-500/50 group">
+                                    <img src={commentImagePreview} className="w-full h-full object-cover" />
+                                    <button onClick={() => { setCommentImage(null); setCommentImagePreview(null) }} className="absolute top-1 right-1 p-1 bg-black/50 text-white rounded-full hover:bg-red-500"><X className="h-3 w-3" /></button>
                                 </div>
                             )}
 
-                            {currentUser.role === 'coach' && (
-                                <Button
-                                    className="w-full justify-start h-12 text-sm font-bold bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/30"
-                                    onClick={() => { setMenuOpen(false); setIsSettingAccessCode(true); }}
-                                >
-                                    <Pencil className="mr-2 h-4 w-4" /> Manage Access Code
+                            <div className="flex gap-2">
+                                <Input
+                                    value={commentText}
+                                    onChange={(e) => setCommentText(e.target.value)}
+                                    placeholder={currentUser?.role === 'coach' ? "Coach feedback..." : "Add a comment..."}
+                                    className={cn("h-10 bg-muted/20", currentUser?.role === 'coach' && "border-yellow-500/30 focus-visible:ring-yellow-500 font-medium")}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleComment()}
+                                />
+                                <Button size="icon" onClick={handleComment} disabled={!commentText.trim() && !commentImage} className={cn(currentUser?.role === 'coach' ? "bg-yellow-500 text-black hover:bg-yellow-400" : "")}>
+                                    <MessageSquare className="h-4 w-4" />
                                 </Button>
-                            )}
+                            </div>
                         </div>
-
-                        {/* Logout */}
-                        <Button variant="destructive" className="w-full h-12 font-bold" onClick={handleLogout}>
-                            <LogOut className="mr-2 h-4 w-4" /> Log Out
-                        </Button>
                     </div>
-                </DrawerContent>
-            </Drawer>
+                )}
+            </DrawerContent>
+        </Drawer>
+    </div>
 
-        </div>
+    {/* Coach Search Drawer */ }
+    <Drawer open={isCoachSearchOpen} onOpenChange={setIsCoachSearchOpen}>
+        <DrawerContent className="bg-zinc-950 border-white/10 max-h-[90dvh]">
+            <DrawerHeader>
+                <DrawerTitle className="text-xl font-bold italic">FIND A COACH</DrawerTitle>
+            </DrawerHeader>
+            <div className="p-6 space-y-6">
+                <div className="flex gap-2">
+                    <Input
+                        placeholder="Search by name..."
+                        value={coachSearchQuery}
+                        onChange={(e) => setCoachSearchQuery(e.target.value)}
+                        className="bg-white/5 border-white/10"
+                        onKeyDown={(e) => e.key === 'Enter' && handleSearchCoaches()}
+                    />
+                    <Button onClick={handleSearchCoaches}>
+                        <Search className="h-4 w-4" />
+                    </Button>
+                </div>
+
+                <div className="space-y-3 max-h-[60dvh] overflow-y-auto pb-40">
+                    {foundCoaches.length === 0 ? (
+                        <p className="text-center text-muted-foreground py-10 text-sm italic">Search to find coaches and follow their programming.</p>
+                    ) : (
+                        foundCoaches.map(coach => (
+                            <div key={coach.id} className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-10 w-10 rounded-full overflow-hidden bg-slate-700">
+                                        <img src={coach.avatar_url} className="h-full w-full object-cover" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white leading-tight">{coach.name}</h4>
+                                        <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Certified Coach</p>
+                                    </div>
+                                </div>
+
+                                {isJoiningCoach?.id === coach.id ? (
+                                    <div className="flex items-center gap-2">
+                                        <Input
+                                            placeholder="Code"
+                                            value={accessCodeInput}
+                                            onChange={(e) => setAccessCodeInput(e.target.value)}
+                                            className="w-24 h-8 text-xs outline-primary border-primary/50 text-center"
+                                            type="password"
+                                        />
+                                        <Button size="sm" onClick={handleJoinCoach} className="h-8 bg-primary text-black hover:bg-primary/90 font-bold px-4">
+                                            JOIN
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <Button
+                                        size="sm"
+                                        variant="secondary"
+                                        onClick={() => setIsJoiningCoach(coach)}
+                                        className="bg-primary/10 hover:bg-primary text-primary hover:text-black border border-primary/20 font-bold"
+                                    >
+                                        FOLLOW
+                                    </Button>
+                                )}
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
+        </DrawerContent>
+    </Drawer>
+
+    {/* Coach Access Code Settings Drawer */ }
+    <Drawer open={isSettingAccessCode} onOpenChange={setIsSettingAccessCode}>
+        <DrawerContent className="bg-zinc-950 border-white/10">
+            <DrawerHeader>
+                <DrawerTitle className="text-xl font-bold italic">PROGRAMMING ACCESS CODE</DrawerTitle>
+            </DrawerHeader>
+            <div className="p-6 space-y-4">
+                <p className="text-xs text-muted-foreground">
+                    Set a unique password for your coaching. People who want to access your specific training will need to enter this code.
+                </p>
+                <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Your Code</label>
+                    <Input
+                        placeholder="Enter a code (e.g. IRON123)"
+                        value={newAccessCode}
+                        onChange={(e) => setNewAccessCode(e.target.value)}
+                        className="bg-white/5 border-white/10 text-lg font-mono tracking-widest text-primary"
+                    />
+                </div>
+                <Button className="w-full bg-primary text-black hover:bg-primary/90 font-bold" onClick={handleUpdateAccessCode}>
+                    SAVE ACCESS CODE
+                </Button>
+                <p className="text-[10px] text-muted-foreground text-center italic">
+                    Leave empty to make your programming public to anyone who finds you.
+                </p>
+            </div>
+        </DrawerContent>
+    </Drawer>
+
+    {/* Mobile Navigation Drawer */ }
+    <Drawer open={menuOpen} onOpenChange={setMenuOpen}>
+        <DrawerContent className="bg-background border-t border-white/10">
+            <div className="mx-auto w-full max-w-sm p-6 space-y-6">
+                {/* Profile Header */}
+                <div className="flex items-center gap-4 pb-6 border-b border-white/10">
+                    <div className="h-12 w-12 rounded-full overflow-hidden bg-muted border-2 border-white/10">
+                        <img src={currentUser.avatar_url} className="h-full w-full object-cover" />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-bold text-white">{currentUser.name}</h3>
+                        <p className="text-xs text-muted-foreground uppercase">{currentUser.role === 'coach' ? 'Coach' : 'Athlete'}</p>
+                    </div>
+                </div>
+
+                {/* Actions */}
+                <div className="space-y-2">
+                    {/* Notifications Item */}
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+                        <span className="text-sm font-medium">Notifications</span>
+                        <div className="flex items-center gap-2">
+                            {unreadCount > 0 && <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 rounded-full">{unreadCount}</span>}
+                            <Popover open={notifOpen} onOpenChange={setNotifOpen}>
+                                <PopoverTrigger asChild>
+                                    <Button size="sm" variant="ghost" className="h-8"><Bell className="h-4 w-4" /></Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-80 p-0 bg-zinc-950 border-white/10" align="end">
+                                    <div className="p-3 border-b border-white/10 font-bold text-sm">Notifications</div>
+                                    <div className="max-h-60 overflow-y-auto">
+                                        {notifications.length === 0 ? <div className="p-4 text-xs text-muted-foreground">None</div> : notifications.map(n => (
+                                            <div key={n.id} className="p-3 border-b border-white/5 text-xs text-white">{n.message}</div>
+                                        ))}
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                    </div>
+
+                    {currentUser.role === 'athlete' && !currentUser.followed_coach_id && (
+                        <Button
+                            variant="outline"
+                            className="w-full justify-start h-12 text-sm font-bold"
+                            onClick={() => { setMenuOpen(false); setIsCoachSearchOpen(true); }}
+                        >
+                            <Plus className="mr-2 h-4 w-4" /> FIND A COACH
+                        </Button>
+                    )}
+
+                    {currentUser.role === 'athlete' && currentUser.followed_coach_id && (
+                        <div className="flex items-center justify-between p-3 rounded-lg bg-primary/10 border border-primary/20">
+                            <span className="text-sm font-bold text-primary">Coach Connected</span>
+                            <button onClick={handleUnfollowCoach} className="text-xs text-muted-foreground underline">Unfollow</button>
+                        </div>
+                    )}
+
+                    {currentUser.role === 'coach' && (
+                        <Button
+                            className="w-full justify-start h-12 text-sm font-bold bg-yellow-500/20 text-yellow-500 hover:bg-yellow-500/30"
+                            onClick={() => { setMenuOpen(false); setIsSettingAccessCode(true); }}
+                        >
+                            <Pencil className="mr-2 h-4 w-4" /> Manage Access Code
+                        </Button>
+                    )}
+                </div>
+
+                {/* Logout */}
+                <Button variant="destructive" className="w-full h-12 font-bold" onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" /> Log Out
+                </Button>
+            </div>
+        </DrawerContent>
+    </Drawer>
+
+        </div >
     )
 }
