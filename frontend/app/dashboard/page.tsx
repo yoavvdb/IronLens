@@ -1127,14 +1127,38 @@ export default function DashboardPage() {
                                                                 {block.description || "No details available."}
                                                             </div>
                                                         ) : (
-                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                            <div className="grid grid-cols-1 gap-2">
                                                                 {block.data.map((set, idx) => (
-                                                                    <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
-                                                                        <div className="flex flex-col">
-                                                                            <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">{set.type}</span>
-                                                                            <span className="text-sm font-medium text-white">{set.reps} Reps</span>
+                                                                    <div key={idx} className={cn(
+                                                                        "flex flex-col p-3 rounded-xl border",
+                                                                        set.type === 'note' ? "bg-yellow-500/10 border-yellow-500/20" : "bg-white/5 border-white/5"
+                                                                    )}>
+                                                                        {/* Header Row: Type & Main Stats */}
+                                                                        <div className="flex items-center justify-between">
+                                                                            <span className={cn(
+                                                                                "text-[10px] font-bold uppercase tracking-wider",
+                                                                                set.type === 'note' ? "text-yellow-500" : "text-muted-foreground"
+                                                                            )}>
+                                                                                {set.type}
+                                                                            </span>
+
+                                                                            {set.type !== 'note' && set.type !== 'movement' && (
+                                                                                <div className="flex items-center gap-3">
+                                                                                    <span className="text-sm font-medium text-white">{set.reps} Reps</span>
+                                                                                    <span className="text-sm font-mono text-primary font-bold">{set.weight}</span>
+                                                                                </div>
+                                                                            )}
                                                                         </div>
-                                                                        <span className="text-sm font-mono text-primary font-bold">{set.weight}</span>
+
+                                                                        {/* Content Row: Text / Note */}
+                                                                        {set.text && (
+                                                                            <div className={cn(
+                                                                                "mt-1 text-sm leading-snug",
+                                                                                set.type === 'note' ? "text-yellow-200 font-medium" : "text-muted-foreground italic"
+                                                                            )}>
+                                                                                {set.type === 'movement' ? set.text : `// ${set.text}`}
+                                                                            </div>
+                                                                        )}
                                                                     </div>
                                                                 ))}
                                                             </div>
