@@ -1770,7 +1770,7 @@ export default function DashboardPage() {
                                             value={commentText}
                                             onChange={(e) => setCommentText(e.target.value)}
                                             placeholder={currentUser?.role === 'coach' ? "Coach feedback..." : "Add a comment..."}
-                                            className={cn("h-10 bg-muted/20", currentUser?.role === 'coach' && "border-yellow-500/30 focus-visible:ring-yellow-500 font-medium")}
+                                            className={cn("h-10 bg-muted/20 text-base md:text-sm", currentUser?.role === 'coach' && "border-yellow-500/30 focus-visible:ring-yellow-500 font-medium")}
                                             onKeyDown={(e) => e.key === 'Enter' && handleComment()}
                                         />
                                         <Button size="icon" onClick={handleComment} disabled={!commentText.trim() && !commentImage} className={cn(currentUser?.role === 'coach' ? "bg-yellow-500 text-black hover:bg-yellow-400" : "")}>
