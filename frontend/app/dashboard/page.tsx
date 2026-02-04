@@ -1312,13 +1312,13 @@ export default function DashboardPage() {
                                                                                                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                                                                                 className="border-t border-white/5 bg-black/30 p-4"
                                                                                             >
-                                                                                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                                                                                                <div className="grid grid-cols-8 gap-1" style={{ gridTemplateColumns: "repeat(8, minmax(0, 1fr))" }}>
                                                                                                     {data.userLogs.map((log) => {
                                                                                                         const showThumbnail = !!log.thumbnail_url;
                                                                                                         return (
                                                                                                             <div
                                                                                                                 key={log.id}
-                                                                                                                className="relative group bg-muted/20 rounded-xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all cursor-pointer aspect-[3/4] shadow-xl"
+                                                                                                                className="relative group bg-muted/20 rounded-md overflow-hidden border border-white/5 hover:border-primary/50 transition-all cursor-pointer aspect-square shadow-xl"
                                                                                                                 onClick={() => handleViewLog(log)}
                                                                                                             >
                                                                                                                 <div className="w-full h-full relative">
@@ -1328,28 +1328,30 @@ export default function DashboardPage() {
                                                                                                                         <video src={log.video_url} className="w-full h-full object-cover" />
                                                                                                                     )}
 
-                                                                                                                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" />
+                                                                                                                    <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
 
                                                                                                                     {/* LARGER SCORES WHEN EXPANDED */}
-                                                                                                                    <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
-                                                                                                                        <div className="text-lg font-black text-white italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-none tracking-tighter">
+                                                                                                                    <div className="absolute inset-0 flex flex-col items-center justify-center p-0.5">
+                                                                                                                        <div className="text-[10px] font-black text-white italic drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] leading-none text-center break-all">
                                                                                                                             {log.result_score}
                                                                                                                         </div>
                                                                                                                     </div>
 
-                                                                                                                    <div className="absolute bottom-1 left-2 right-2 flex items-center justify-between text-[7px] font-black uppercase tracking-widest text-white/40">
+                                                                                                                    <div className="absolute bottom-1 left-1 right-1 flex items-center justify-between text-[6px] font-black uppercase tracking-widest text-white/40">
                                                                                                                         <button
                                                                                                                             onClick={(e) => { e.stopPropagation(); handleKudos(log.id, e); }}
                                                                                                                             className={cn(
-                                                                                                                                "flex items-center gap-0.5 px-1.5 py-0.5 rounded-full transition-all duration-300",
+                                                                                                                                "flex items-center gap-0.5 px-0.5 rounded-full transition-all duration-300",
                                                                                                                                 log.kudos_count > 0 ? "text-primary bg-primary/10 shadow-[0_0_10px_rgba(34,197,94,0.3)]" : "hover:text-white"
                                                                                                                             )}
                                                                                                                         >
-                                                                                                                            <ThumbsUp className={cn("h-2 w-2", log.kudos_count > 0 && "fill-primary")} /> {log.kudos_count}
+                                                                                                                            <ThumbsUp className={cn("h-3.5 w-3.5", log.kudos_count > 0 && "fill-primary")} /> {log.kudos_count > 0 && log.kudos_count}
                                                                                                                         </button>
-                                                                                                                        <div className="flex items-center gap-0.5">
-                                                                                                                            <MessageSquare className="h-2 w-2" /> {log.comments.length}
-                                                                                                                        </div>
+                                                                                                                        {log.comments.length > 0 && (
+                                                                                                                            <div className="flex items-center gap-0.5">
+                                                                                                                                <MessageSquare className="h-3.5 w-3.5" />
+                                                                                                                            </div>
+                                                                                                                        )}
                                                                                                                     </div>
 
                                                                                                                     {currentUser.id === log.user_id && (
