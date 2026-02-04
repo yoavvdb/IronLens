@@ -1163,6 +1163,12 @@ export default function DashboardPage() {
                                                                             </span>
                                                                         ) : (
                                                                             <>
+                                                                                {set.target_sets && parseInt(set.target_sets) > 1 && (
+                                                                                    <>
+                                                                                        <span className="font-bold text-white">{set.target_sets}</span>
+                                                                                        <span className="text-muted-foreground text-xs mx-1">x</span>
+                                                                                    </>
+                                                                                )}
                                                                                 <span>{set.reps} <span className="text-muted-foreground">@</span> {set.weight}</span>
                                                                                 {set.text && <span className="text-xs text-yellow-500/80 font-sans italic">// {set.text}</span>}
                                                                             </>
