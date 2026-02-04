@@ -39,10 +39,11 @@ interface User {
 
 interface ProgrammingSet {
     id: string;
-    type: 'working' | 'warmup' | 'note' | 'movement';
+    type: 'working' | 'warmup' | 'note' | 'movement' | 'complex';
     reps?: string;
     weight?: string;
     text?: string;
+    target_sets?: string;  // New field for "N x Reps"
 }
 
 interface ProgrammingBlock {
@@ -213,9 +214,35 @@ function SortableBlock({
                                     <option value="warmup">Warmup</option>
                                     <option value="movement">Move</option>
                                     <option value="note">Note</option>
+                                    <option value="complex">Batch</option>
                                 </select>
 
-                                {set.type !== 'note' && set.type !== 'movement' && (
+                                {set.type === 'complex' ? (
+                                    <>
+                                        <Input
+                                            value={set.target_sets || ""}
+                                            onChange={(e) => updateSetInBlock(index, si, 'target_sets', e.target.value)}
+                                            className="h-10 w-16 bg-black/20 text-base border-white/5 font-mono text-center px-1 border-r-0 rounded-r-none focus:ring-0"
+                                            placeholder="Sets"
+                                        />
+                                        <div className="h-10 bg-black/20 border-y border-white/5 flex items-center justify-center px-1 text-muted-foreground text-xs font-mono">
+                                            X
+                                        </div>
+                                        <Input
+                                            value={set.reps || ""}
+                                            onChange={(e) => updateSetInBlock(index, si, 'reps', e.target.value)}
+                                            className="h-10 w-16 bg-black/20 text-base border-white/5 font-mono text-center px-1 rounded-l-none focus:ring-0"
+                                            placeholder="Reps"
+                                        />
+                                        <span className="text-muted-foreground text-sm">@</span>
+                                        <Input
+                                            value={set.weight || ""}
+                                            onChange={(e) => updateSetInBlock(index, si, 'weight', e.target.value)}
+                                            className="h-10 w-24 bg-black/20 text-base border-white/5 font-mono text-center px-1"
+                                            placeholder="Load"
+                                        />
+                                    </>
+                                ) : set.type !== 'note' && set.type !== 'movement' && (
                                     <>
                                         <Input
                                             value={set.reps || ""}
@@ -544,7 +571,36 @@ export default function DashboardPage() {
 
     const openLogForExercise = (exerciseName: string) => {
         setTitle(exerciseName)
-        setInputSets([{ id: "1", result: "", file: null }]) // Default 1 set
+
+        // --- Smart Set Generation logic ---
+        // Find the programming block
+        const block = programming.find(p => p.name === exerciseName);
+        let initialSets: LogEntrySet[] = [];
+
+        if (block && block.type === 'strength') {
+            block.data.forEach(s => {
+                if (s.type === 'working') {
+                    // Regular working set = 1 input
+                    initialSets.push({ id: Math.random().toString(), result: "", file: null });
+                } else if (s.type === 'complex' && s.target_sets) {
+                    // Complex set = N inputs
+                    const count = parseInt(s.target_sets);
+                    if (!isNaN(count) && count > 0) {
+                        for (let i = 0; i < count; i++) {
+                            initialSets.push({ id: Math.random().toString(), result: "", file: null });
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fallback: If no sets generated (e.g. metcon or no working sets), generate 1
+        if (initialSets.length === 0) {
+            initialSets.push({ id: "1", result: "", file: null });
+        }
+
+        setInputSets(initialSets)
+
         setEditingLogId(null)
         setSuccess(false)
         setDrawerOpen(true)
