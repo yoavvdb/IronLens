@@ -220,6 +220,7 @@ class ProgrammingSet(BaseModel):
     reps: Optional[str] = None
     weight: Optional[str] = None
     text: Optional[str] = None # For notes or metcon movements
+    target_sets: Optional[str] = None # New field for "N x Reps"
 
 class ProgrammingBlock(BaseModel):
     id: str
