@@ -1515,7 +1515,7 @@ export default function DashboardPage() {
                                                                                 exit={{ height: 0, opacity: 0 }}
                                                                                 className="border-t border-white/5 bg-black/30 p-3"
                                                                             >
-                                                                                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1.5">
+                                                                                <div className="grid grid-cols-8 gap-1">
                                                                                     {data.userLogs.map((log) => (
                                                                                         <div
                                                                                             key={log.id}
