@@ -1023,122 +1023,123 @@ export default function DashboardPage() {
                                         <div
                                             onClick={() => toggleFolder(block.name)}
                                             className={cn(
-                                                "w-full flex items-center justify-between p-4 cursor-pointer transition-colors hover:bg-white/5",
+                                                "w-full p-4 cursor-pointer transition-colors hover:bg-white/5 flex flex-col gap-3",
                                                 isOpen && "bg-white/5 border-b border-white/10"
                                             )}
                                         >
-                                            <div className="flex gap-4 overflow-hidden min-w-0 pr-4 items-center">
-                                                {/* Check/Play Indicator */}
-                                                <div className={cn("h-10 w-10 shrink-0 rounded-xl flex items-center justify-center transition-colors shadow-lg",
-                                                    userCount > 0 ? "bg-primary text-black shadow-primary/20" : "bg-muted/30 text-muted-foreground border border-white/5"
-                                                )}>
-                                                    {isOpen ? <ChevronUp className="h-5 w-5" /> : (userCount > 0 ? <div className="relative"><ChevronDown className="h-5 w-5 opacity-40" /><Check className="h-3 w-3 text-black absolute -top-1 -right-1" /></div> : <ChevronDown className="h-5 w-5" />)}
-                                                </div>
-
-                                                <div className="min-w-0 flex-1 space-y-0.5">
-                                                    <div className="flex items-start gap-2 flex-wrap">
-                                                        {isMetcon ? (
-                                                            <span className="text-[9px] font-bold bg-pink-500/20 text-pink-400 px-1.5 py-0.5 rounded border border-pink-500/20 uppercase tracking-wider shrink-0 mt-0.5">WOD</span>
-                                                        ) : (
-                                                            <span className="text-[9px] font-bold bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded border border-blue-500/20 uppercase tracking-wider shrink-0 mt-0.5">LIFT</span>
-                                                        )}
-                                                        <h3 className={cn("text-lg font-black italic text-white leading-tight break-words min-w-0", isMetcon && "text-pink-100")}>
-                                                            {block.name.toLowerCase() === 'wod' ? 'Daily Workout' : block.name}
-                                                        </h3>
+                                            {/* Row 1: Header (Chevron + Title + Actions) */}
+                                            <div className="flex items-center justify-between w-full">
+                                                <div className="flex gap-4 overflow-hidden min-w-0 pr-2 items-center">
+                                                    {/* Check/Play Indicator */}
+                                                    <div className={cn("h-10 w-10 shrink-0 rounded-xl flex items-center justify-center transition-colors shadow-lg",
+                                                        userCount > 0 ? "bg-primary text-black shadow-primary/20" : "bg-muted/30 text-muted-foreground border border-white/5"
+                                                    )}>
+                                                        {isOpen ? <ChevronUp className="h-5 w-5" /> : (userCount > 0 ? <div className="relative"><ChevronDown className="h-5 w-5 opacity-40" /><Check className="h-3 w-3 text-black absolute -top-1 -right-1" /></div> : <ChevronDown className="h-5 w-5" />)}
                                                     </div>
 
-                                                    {/* Preview Line - Vertical Layout */}
-                                                    {!isOpen && (
-                                                        <div className="text-sm text-zinc-300 font-mono leading-tight space-y-0.5">
+                                                    <div className="min-w-0 flex-1">
+                                                        <div className="flex items-start gap-2 flex-wrap">
                                                             {isMetcon ? (
-                                                                <div className="flex flex-col gap-0.5 text-pink-200/90 whitespace-pre-line">
-                                                                    {(block.description || block.metcon_type)?.split('\n').map((line, idx) => (
-                                                                        <div key={idx} className="leading-snug">
-                                                                            {line}
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
+                                                                <span className="text-[9px] font-bold bg-pink-500/20 text-pink-400 px-1.5 py-0.5 rounded border border-pink-500/20 uppercase tracking-wider shrink-0 mt-0.5">WOD</span>
                                                             ) : (
-                                                                <div className="flex flex-col gap-0.5">
-                                                                    {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').map((set, idx) => {
-                                                                        const isNote = set.type?.toLowerCase() === 'note';
-                                                                        return (
-                                                                            <div key={idx} className="text-white flex items-center gap-2">
-                                                                                {isNote ? (
-                                                                                    <span className="text-sm text-yellow-500 font-medium block">
-                                                                                        {set.text || <span className="opacity-50 italic">Empty Note</span>}
-                                                                                    </span>
-                                                                                ) : (
-                                                                                    <>
-                                                                                        <span>{set.reps} <span className="text-muted-foreground">@</span> {set.weight}</span>
-                                                                                        {set.text && <span className="text-xs text-yellow-500/80 font-sans italic">// {set.text}</span>}
-                                                                                    </>
-                                                                                )}
-                                                                            </div>
-                                                                        )
-                                                                    })}
+                                                                <span className="text-[9px] font-bold bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded border border-blue-500/20 uppercase tracking-wider shrink-0 mt-0.5">LIFT</span>
+                                                            )}
+                                                            <h3 className={cn("text-lg font-black italic text-white leading-tight break-words min-w-0", isMetcon && "text-pink-100")}>
+                                                                {block.name.toLowerCase() === 'wod' ? 'Daily Workout' : block.name}
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Actions: Log Result + User Score + Avatars (Moved to Header) */}
+                                                <div className="flex items-center gap-3 shrink-0 ml-auto pl-2">
+                                                    {(() => {
+                                                        const currentUserLogs = exerciseLogs[currentUser.id];
+                                                        if (currentUserLogs && currentUserLogs.length > 0) {
+                                                            const parsedScores = currentUserLogs.map(log => ({
+                                                                log,
+                                                                parsed: parseScore(log.result_score)
+                                                            }));
+                                                            const scoreType = parsedScores[0]?.parsed.type || 'reps';
+                                                            const sorted = [...parsedScores].sort((a, b) => {
+                                                                if (scoreType === 'time') {
+                                                                    return a.parsed.value - b.parsed.value;
+                                                                } else {
+                                                                    return b.parsed.value - a.parsed.value;
+                                                                }
+                                                            });
+                                                            const bestScore = sorted[0].log.result_score;
+                                                            return (
+                                                                <div className="px-3 py-1.5 bg-primary/20 border border-primary/40 rounded-lg">
+                                                                    <div className="text-xs font-bold text-primary">
+                                                                        {bestScore}
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        }
+                                                        return null;
+                                                    })()}
+
+                                                    {userCount > 0 && (
+                                                        <div className="flex -space-x-2">
+                                                            {Object.values(exerciseLogs).slice(0, 3).map(ul => (
+                                                                <div key={ul[0].id} className="h-7 w-7 rounded-full ring-2 ring-black bg-slate-700 overflow-hidden">
+                                                                    <img src={ul[0].user_avatar} className="h-full w-full object-cover" />
+                                                                </div>
+                                                            ))}
+                                                            {userCount > 3 && (
+                                                                <div className="h-7 w-7 rounded-full ring-2 ring-black bg-muted flex items-center justify-center text-[9px] font-bold text-black">
+                                                                    +{userCount - 3}
                                                                 </div>
                                                             )}
                                                         </div>
                                                     )}
+
+                                                    <Button
+                                                        size="icon"
+                                                        variant="secondary"
+                                                        className="h-9 w-9 rounded-full bg-white/10 hover:bg-primary hover:text-black transition-all shadow-xl border border-white/5"
+                                                        onClick={(e) => { e.stopPropagation(); openLogForExercise(block.name); }}
+                                                    >
+                                                        <Plus className="h-5 w-5" />
+                                                    </Button>
                                                 </div>
                                             </div>
 
-                                            {/* Action: Log Result + User Score + Avatars */}
-                                            <div className="flex items-center gap-3 shrink-0">
-                                                {/* Current User's Best Score */}
-                                                {(() => {
-                                                    const currentUserLogs = exerciseLogs[currentUser.id];
-                                                    if (currentUserLogs && currentUserLogs.length > 0) {
-                                                        const parsedScores = currentUserLogs.map(log => ({
-                                                            log,
-                                                            parsed: parseScore(log.result_score)
-                                                        }));
-                                                        const scoreType = parsedScores[0]?.parsed.type || 'reps';
-                                                        const sorted = [...parsedScores].sort((a, b) => {
-                                                            if (scoreType === 'time') {
-                                                                return a.parsed.value - b.parsed.value;
-                                                            } else {
-                                                                return b.parsed.value - a.parsed.value;
-                                                            }
-                                                        });
-                                                        const bestScore = sorted[0].log.result_score;
-                                                        return (
-                                                            <div className="px-3 py-1.5 bg-primary/20 border border-primary/40 rounded-lg">
-                                                                <div className="text-xs font-bold text-primary">
-                                                                    {bestScore}
+                                            {/* Row 2: Full Width Content */}
+                                            {!isOpen && (
+                                                <div className="w-full text-sm text-zinc-300 font-mono leading-tight space-y-0.5 pl-[3.5rem]"> {/* Indented to align with text */}
+                                                    {isMetcon ? (
+                                                        <div className="flex flex-col gap-0.5 text-pink-200/90 whitespace-pre-line">
+                                                            {(block.description || block.metcon_type)?.split('\n').map((line, idx) => (
+                                                                <div key={idx} className="leading-snug">
+                                                                    {line}
                                                                 </div>
-                                                            </div>
-                                                        );
-                                                    }
-                                                    return null;
-                                                })()}
-
-                                                {/* User Avatars - RESTORED */}
-                                                {userCount > 0 && (
-                                                    <div className="flex -space-x-2">
-                                                        {Object.values(exerciseLogs).slice(0, 3).map(ul => (
-                                                            <div key={ul[0].id} className="h-7 w-7 rounded-full ring-2 ring-black bg-slate-700 overflow-hidden">
-                                                                <img src={ul[0].user_avatar} className="h-full w-full object-cover" />
-                                                            </div>
-                                                        ))}
-                                                        {userCount > 3 && (
-                                                            <div className="h-7 w-7 rounded-full ring-2 ring-black bg-muted flex items-center justify-center text-[9px] font-bold text-black">
-                                                                +{userCount - 3}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
-
-                                                <Button
-                                                    size="icon"
-                                                    variant="secondary"
-                                                    className="h-9 w-9 rounded-full bg-white/10 hover:bg-primary hover:text-black transition-all shadow-xl border border-white/5"
-                                                    onClick={(e) => { e.stopPropagation(); openLogForExercise(block.name); }}
-                                                >
-                                                    <Plus className="h-5 w-5" />
-                                                </Button>
-                                            </div>
+                                                            ))}
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex flex-col gap-0.5">
+                                                            {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').map((set, idx) => {
+                                                                const isNote = set.type?.toLowerCase() === 'note';
+                                                                return (
+                                                                    <div key={idx} className="text-white flex items-center gap-2">
+                                                                        {isNote ? (
+                                                                            <span className="text-sm text-yellow-500 font-medium block">
+                                                                                {set.text || <span className="opacity-50 italic">Empty Note</span>}
+                                                                            </span>
+                                                                        ) : (
+                                                                            <>
+                                                                                <span>{set.reps} <span className="text-muted-foreground">@</span> {set.weight}</span>
+                                                                                {set.text && <span className="text-xs text-yellow-500/80 font-sans italic">// {set.text}</span>}
+                                                                            </>
+                                                                        )}
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Expanded Content */}

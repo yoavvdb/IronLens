@@ -782,6 +782,9 @@ video {
 .ml-1 {
   margin-left: 0.25rem;
 }
+.ml-auto {
+  margin-left: auto;
+}
 .block {
   display: block;
 }
@@ -1616,6 +1619,15 @@ video {
 }
 .pb-0 {
   padding-bottom: 0px;
+}
+.pl-2 {
+  padding-left: 0.5rem;
+}
+.pl-\[3\.5rem\] {
+  padding-left: 3.5rem;
+}
+.pr-2 {
+  padding-right: 0.5rem;
 }
 .text-center {
   text-align: center;
