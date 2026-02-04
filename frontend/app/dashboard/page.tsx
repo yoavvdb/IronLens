@@ -1815,8 +1815,8 @@ export default function DashboardPage() {
                                             className={cn("h-10 bg-muted/20 text-base md:text-sm", currentUser?.role === 'coach' && "border-yellow-500/30 focus-visible:ring-yellow-500 font-medium")}
                                             onKeyDown={(e) => e.key === 'Enter' && handleComment()}
                                         />
-                                        <Button size="icon" onClick={handleComment} disabled={!commentText.trim() && !commentImage} className={cn("h-14 w-14 shrink-0", currentUser?.role === 'coach' ? "bg-yellow-500 text-black hover:bg-yellow-400" : "")}>
-                                            <MessageSquare className="h-7 w-7" />
+                                        <Button size="icon" onClick={handleComment} disabled={!commentText.trim() && !commentImage} className={cn(currentUser?.role === 'coach' ? "bg-yellow-500 text-black hover:bg-yellow-400" : "")}>
+                                            <MessageSquare className="h-4 w-4" />
                                         </Button>
                                     </div>
                                 </div>
