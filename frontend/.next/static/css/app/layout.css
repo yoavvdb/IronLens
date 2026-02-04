@@ -709,6 +709,9 @@ video {
 .top-4 {
   top: 1rem;
 }
+.bottom-0\.5 {
+  bottom: 0.125rem;
+}
 .z-10 {
   z-index: 10;
 }
@@ -809,6 +812,9 @@ video {
 }
 .aspect-video {
   aspect-ratio: 16 / 9;
+}
+.aspect-square {
+  aspect-ratio: 1 / 1;
 }
 .h-1 {
   height: 0.25rem;
@@ -1064,6 +1070,9 @@ video {
 }
 .grid-cols-5 {
   grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .flex-col {
   flex-direction: column;
@@ -2403,6 +2412,10 @@ video {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .sm\:grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
   .sm\:text-left {
     text-align: left;
   }
@@ -2444,6 +2457,10 @@ video {
 
   .md\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-8 {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
   }
 
   .md\:flex-nowrap {

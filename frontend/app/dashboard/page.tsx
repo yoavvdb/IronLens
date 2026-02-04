@@ -1515,11 +1515,11 @@ export default function DashboardPage() {
                                                                                 exit={{ height: 0, opacity: 0 }}
                                                                                 className="border-t border-white/5 bg-black/30 p-3"
                                                                             >
-                                                                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+                                                                                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-1.5">
                                                                                     {data.userLogs.map((log) => (
                                                                                         <div
                                                                                             key={log.id}
-                                                                                            className="relative group bg-muted/20 rounded-xl overflow-hidden border border-white/5 hover:border-primary/50 transition-all cursor-pointer aspect-[3/4] shadow-xl"
+                                                                                            className="relative group bg-muted/20 rounded-md overflow-hidden border border-white/5 hover:border-primary/50 transition-all cursor-pointer aspect-square shadow-xl"
                                                                                             onClick={() => handleViewLog(log)}
                                                                                         >
                                                                                             <div className="w-full h-full relative">
@@ -1528,15 +1528,14 @@ export default function DashboardPage() {
                                                                                                 ) : log.video_url && (
                                                                                                     <video src={log.video_url} className="w-full h-full object-cover" />
                                                                                                 )}
-                                                                                                <h1 className="text-xl font-bold bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
-                                                                                                    IronLens <span className="text-xs text-yellow-500 font-mono border border-yellow-500/30 px-1 rounded">v2.1</span>
-                                                                                                </h1>                                                                                                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
-                                                                                                <div className="absolute inset-0 flex items-center justify-center p-2">
-                                                                                                    <div className="text-lg font-black text-white italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-none">
+
+                                                                                                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
+                                                                                                <div className="absolute inset-0 flex items-center justify-center p-1">
+                                                                                                    <div className="text-sm font-black text-white italic drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-none">
                                                                                                         {log.result_score}
                                                                                                     </div>
                                                                                                 </div>
-                                                                                                <div className="absolute bottom-1 left-2 right-2 flex items-center justify-between text-[7px] font-black uppercase tracking-widest text-white/40">
+                                                                                                <div className="absolute bottom-0.5 left-1 right-1 flex items-center justify-between text-[6px] font-black uppercase tracking-widest text-white/40">
                                                                                                     <button
                                                                                                         onClick={(e) => { e.stopPropagation(); handleKudos(log.id, e); }}
                                                                                                         className={cn(
@@ -1544,11 +1543,13 @@ export default function DashboardPage() {
                                                                                                             log.kudos_count > 0 ? "text-primary bg-primary/10 shadow-[0_0_10px_rgba(34,197,94,0.3)]" : "hover:text-white"
                                                                                                         )}
                                                                                                     >
-                                                                                                        <ThumbsUp className={cn("h-2 w-2", log.kudos_count > 0 && "fill-primary")} /> {log.kudos_count}
+                                                                                                        <ThumbsUp className={cn("h-3.5 w-3.5", log.kudos_count > 0 && "fill-primary")} /> {log.kudos_count > 0 && log.kudos_count}
                                                                                                     </button>
-                                                                                                    <div className="flex items-center gap-0.5">
-                                                                                                        <MessageSquare className="h-2 w-2" /> {log.comments.length}
-                                                                                                    </div>
+                                                                                                    {log.comments.length > 0 && (
+                                                                                                        <div className="flex items-center gap-0.5">
+                                                                                                            <MessageSquare className="h-3.5 w-3.5" />
+                                                                                                        </div>
+                                                                                                    )}
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
