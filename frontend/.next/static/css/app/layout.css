@@ -1696,6 +1696,9 @@ video {
 .pb-\[calc\(1rem\+env\(safe-area-inset-bottom\)\)\] {
   padding-bottom: calc(1rem + env(safe-area-inset-bottom));
 }
+.pl-0 {
+  padding-left: 0px;
+}
 .text-center {
   text-align: center;
 }
@@ -2490,6 +2493,10 @@ video {
 
   .md\:pb-0 {
     padding-bottom: 0px;
+  }
+
+  .md\:pl-\[3\.5rem\] {
+    padding-left: 3.5rem;
   }
 
   .md\:text-sm {

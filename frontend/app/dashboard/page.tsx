@@ -1142,7 +1142,7 @@ export default function DashboardPage() {
 
                                             {/* Row 2: Full Width Content */}
                                             {!isOpen && (
-                                                <div className="w-full text-sm text-zinc-300 font-mono leading-tight space-y-0.5 pl-[3.5rem]"> {/* Indented to align with text */}
+                                                <div className="w-full text-sm text-zinc-300 font-mono leading-tight space-y-0.5 pl-0 md:pl-[3.5rem]"> {/* Indented on desktop, full width on mobile */}
                                                     {isMetcon ? (
                                                         <div className="flex flex-col gap-0.5 text-pink-200/90 whitespace-pre-line">
                                                             {(block.description || block.metcon_type)?.split('\n').map((line, idx) => (
