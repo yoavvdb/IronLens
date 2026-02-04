@@ -211,43 +211,24 @@ function SortableBlock({
                                     onChange={(e) => updateSetInBlock(index, si, 'type', e.target.value)}
                                 >
                                     <option value="working">Work</option>
-                                    <option value="warmup">Warmup</option>
-                                    <option value="movement">Move</option>
                                     <option value="note">Note</option>
-                                    <option value="complex">Batch</option>
                                 </select>
 
-                                {set.type === 'complex' ? (
+                                {set.type === 'working' && (
                                     <>
+                                        {/* Optional Sets Count (The "Batch" integration) */}
                                         <Input
                                             value={set.target_sets || ""}
                                             onChange={(e) => updateSetInBlock(index, si, 'target_sets', e.target.value)}
-                                            className="h-10 w-16 bg-black/20 text-base border-white/5 font-mono text-center px-1 border-r-0 rounded-r-none focus:ring-0"
-                                            placeholder="Sets"
+                                            className="h-10 w-12 bg-black/20 text-base border-white/5 font-mono text-center px-0 focus:ring-0 placeholder:text-white/20"
+                                            placeholder="Set"
                                         />
-                                        <div className="h-10 bg-black/20 border-y border-white/5 flex items-center justify-center px-1 text-muted-foreground text-xs font-mono">
-                                            X
-                                        </div>
+                                        <span className="text-muted-foreground text-xs font-mono">x</span>
+
                                         <Input
                                             value={set.reps || ""}
                                             onChange={(e) => updateSetInBlock(index, si, 'reps', e.target.value)}
-                                            className="h-10 w-16 bg-black/20 text-base border-white/5 font-mono text-center px-1 rounded-l-none focus:ring-0"
-                                            placeholder="Reps"
-                                        />
-                                        <span className="text-muted-foreground text-sm">@</span>
-                                        <Input
-                                            value={set.weight || ""}
-                                            onChange={(e) => updateSetInBlock(index, si, 'weight', e.target.value)}
-                                            className="h-10 w-24 bg-black/20 text-base border-white/5 font-mono text-center px-1"
-                                            placeholder="Load"
-                                        />
-                                    </>
-                                ) : set.type !== 'note' && set.type !== 'movement' && (
-                                    <>
-                                        <Input
-                                            value={set.reps || ""}
-                                            onChange={(e) => updateSetInBlock(index, si, 'reps', e.target.value)}
-                                            className="h-10 w-20 bg-black/20 text-base border-white/5 font-mono text-center px-1"
+                                            className="h-10 w-16 bg-black/20 text-base border-white/5 font-mono text-center px-1"
                                             placeholder="Reps"
                                         />
                                         <span className="text-muted-foreground text-sm">@</span>
@@ -580,15 +561,12 @@ export default function DashboardPage() {
         if (block && block.type === 'strength') {
             block.data.forEach(s => {
                 if (s.type === 'working') {
-                    // Regular working set = 1 input
-                    initialSets.push({ id: Math.random().toString(), result: "", file: null });
-                } else if (s.type === 'complex' && s.target_sets) {
-                    // Complex set = N inputs
-                    const count = parseInt(s.target_sets);
-                    if (!isNaN(count) && count > 0) {
-                        for (let i = 0; i < count; i++) {
-                            initialSets.push({ id: Math.random().toString(), result: "", file: null });
-                        }
+                    // Check for batch sets
+                    const batchCount = s.target_sets ? parseInt(s.target_sets) : 1;
+                    const count = (batchCount > 0) ? batchCount : 1;
+
+                    for (let i = 0; i < count; i++) {
+                        initialSets.push({ id: Math.random().toString(), result: "", file: null });
                     }
                 }
             });
