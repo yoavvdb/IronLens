@@ -1682,17 +1682,17 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <Button
-                                        size="lg"
+                                        size="sm"
                                         variant="ghost"
                                         onClick={() => handleKudos(viewingLog.id)}
                                         className={cn(
-                                            "transition-all duration-300 gap-3 px-6 h-14",
-                                            viewingLog.kudos_count > 0 ? "text-primary bg-primary/10 shadow-[0_0_20px_rgba(34,197,94,0.4)]" : "text-muted-foreground"
+                                            "transition-all duration-300 gap-2 px-3",
+                                            viewingLog.kudos_count > 0 ? "text-primary bg-primary/10 shadow-[0_0_15px_rgba(34,197,94,0.3)]" : "text-muted-foreground"
                                         )}
                                     >
-                                        <ThumbsUp className={cn("h-8 w-8 shrink-0", viewingLog.kudos_count > 0 && "fill-primary")} />
-                                        <span className="font-black text-xl">
-                                            {viewingLog.kudos_count > 0 ? `${viewingLog.kudos_count}` : "LIKE"}
+                                        <ThumbsUp className={cn("h-4 w-4 shrink-0", viewingLog.kudos_count > 0 && "fill-primary")} />
+                                        <span className="font-bold">
+                                            {viewingLog.kudos_count > 0 ? `${viewingLog.kudos_count} KUDOS` : "KUDOS"}
                                         </span>
                                     </Button>
                                 </div>
@@ -1737,16 +1737,16 @@ export default function DashboardPage() {
                                                     key={l.id}
                                                     onClick={() => setViewingLog(l)}
                                                     className={cn(
-                                                        "relative h-10 w-8 rounded overflow-hidden border shrink-0 transition-all",
+                                                        "relative h-16 w-12 rounded overflow-hidden border shrink-0 transition-all",
                                                         viewingLog.id === l.id ? "border-primary ring-1 ring-primary" : "border-white/10 hover:border-white/30"
                                                     )}
                                                 >
                                                     {l.thumbnail_url ? (
                                                         <img src={l.thumbnail_url} className="h-full w-full object-cover" />
                                                     ) : (
-                                                        <div className="h-full w-full bg-muted flex items-center justify-center"><VideoOff className="h-2 w-2" /></div>
+                                                        <div className="h-full w-full bg-muted flex items-center justify-center"><VideoOff className="h-3 w-3" /></div>
                                                     )}
-                                                    <div className="absolute bottom-0 inset-x-0 bg-black/60 text-[6px] text-center text-white py-px truncate">
+                                                    <div className="absolute bottom-0 inset-x-0 bg-black/60 text-[8px] text-center text-white py-0.5 truncate">
                                                         {l.result_score}
                                                     </div>
                                                 </button>
