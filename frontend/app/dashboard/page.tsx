@@ -1645,12 +1645,14 @@ export default function DashboardPage() {
                                         variant="ghost"
                                         onClick={() => handleKudos(viewingLog.id)}
                                         className={cn(
-                                            "transition-all duration-300",
-                                            viewingLog.kudos_count > 0 ? "text-primary hover:bg-primary/10 shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-pulse" : "text-muted-foreground"
+                                            "transition-all duration-300 gap-2 px-3",
+                                            viewingLog.kudos_count > 0 ? "text-primary bg-primary/10 shadow-[0_0_15px_rgba(34,197,94,0.3)]" : "text-muted-foreground"
                                         )}
                                     >
-                                        <ThumbsUp className={cn("h-4 w-4 mr-2", viewingLog.kudos_count > 0 && "fill-primary")} />
-                                        {viewingLog.kudos_count > 0 ? `${viewingLog.kudos_count} KUDOS` : "KUDOS"}
+                                        <ThumbsUp className={cn("h-4 w-4 shrink-0", viewingLog.kudos_count > 0 && "fill-primary")} />
+                                        <span className="font-bold">
+                                            {viewingLog.kudos_count > 0 ? `${viewingLog.kudos_count} KUDOS` : "KUDOS"}
+                                        </span>
                                     </Button>
                                 </div>
 
