@@ -1312,7 +1312,7 @@ export default function DashboardPage() {
                                                                                                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                                                                                 className="border-t border-white/5 bg-black/30 p-4"
                                                                                             >
-                                                                                                <div className="grid grid-cols-8 gap-1" style={{ gridTemplateColumns: "repeat(8, minmax(0, 1fr))" }}>
+                                                                                                <div className="grid grid-cols-4 md:grid-cols-8 gap-1">
                                                                                                     {data.userLogs.map((log) => {
                                                                                                         const showThumbnail = !!log.thumbnail_url;
                                                                                                         return (
