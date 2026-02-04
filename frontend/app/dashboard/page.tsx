@@ -1156,20 +1156,22 @@ export default function DashboardPage() {
                                                             {block.data.filter(s => s.type !== 'warmup' && s.type !== 'movement').map((set, idx) => {
                                                                 const isNote = set.type?.toLowerCase() === 'note';
                                                                 return (
-                                                                    <div key={idx} className="text-white flex items-center gap-2">
+                                                                    <div key={idx} className="text-white flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
                                                                         {isNote ? (
                                                                             <span className="text-sm text-yellow-500 font-medium block">
                                                                                 {set.text || <span className="opacity-50 italic">Empty Note</span>}
                                                                             </span>
                                                                         ) : (
                                                                             <>
-                                                                                {set.target_sets && parseInt(set.target_sets) > 1 && (
-                                                                                    <>
-                                                                                        <span className="font-bold text-white">{set.target_sets}</span>
-                                                                                        <span className="text-muted-foreground text-xs mx-1">x</span>
-                                                                                    </>
-                                                                                )}
-                                                                                <span>{set.reps} <span className="text-muted-foreground">@</span> {set.weight}</span>
+                                                                                <span className="whitespace-nowrap">
+                                                                                    {set.target_sets && parseInt(set.target_sets) > 1 && (
+                                                                                        <>
+                                                                                            <span className="font-bold text-white">{set.target_sets}</span>
+                                                                                            <span className="text-muted-foreground text-xs mx-1">x</span>
+                                                                                        </>
+                                                                                    )}
+                                                                                    <span>{set.reps} <span className="text-muted-foreground">@</span> {set.weight}</span>
+                                                                                </span>
                                                                                 {set.text && <span className="text-xs text-yellow-500/80 font-sans italic">// {set.text}</span>}
                                                                             </>
                                                                         )}
