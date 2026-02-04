@@ -869,6 +869,9 @@ video {
 .h-px {
   height: 1px;
 }
+.h-\[85dvh\] {
+  height: 85dvh;
+}
 .max-h-80 {
   max-height: 20rem;
 }
@@ -896,8 +899,14 @@ video {
 .max-h-\[90dvh\] {
   max-height: 90dvh;
 }
+.max-h-\[85dvh\] {
+  max-height: 85dvh;
+}
 .min-h-screen {
   min-height: 100vh;
+}
+.min-h-0 {
+  min-height: 0px;
 }
 .w-1 {
   width: 0.25rem;
@@ -1628,6 +1637,9 @@ video {
 }
 .pr-2 {
   padding-right: 0.5rem;
+}
+.pb-\[calc\(1rem\+env\(safe-area-inset-bottom\)\)\] {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
 }
 .text-center {
   text-align: center;

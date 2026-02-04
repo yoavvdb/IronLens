@@ -1627,9 +1627,9 @@ export default function DashboardPage() {
             {/* View Detail Drawer (Comments/Video) */}
             <div className="fixed inset-0 z-40 pointer-events-none">
                 <Drawer open={detailDrawerOpen} onOpenChange={setDetailDrawerOpen}>
-                    <DrawerContent className="bg-background border-t border-white/10 max-h-[90vh] pointer-events-auto">
+                    <DrawerContent className="bg-background border-t border-white/10 max-h-[85dvh] h-[85dvh] flex flex-col pointer-events-auto">
                         {viewingLog && (
-                            <div className="mx-auto w-full max-w-md flex flex-col h-full">
+                            <div className="mx-auto w-full max-w-md flex flex-col h-full min-h-0">
                                 <div className="p-4 border-b border-white/10 flex items-center justify-between bg-black/20">
                                     <div className="flex items-center gap-3">
                                         <div className="h-8 w-8 rounded-full bg-slate-700 overflow-hidden">
@@ -1756,7 +1756,7 @@ export default function DashboardPage() {
                                 </div>
 
                                 {/* Add Comment Footer */}
-                                <div className="p-4 border-t border-white/10 bg-background pb-8 flex flex-col gap-3">
+                                <div className="p-4 border-t border-white/10 bg-background pb-[calc(1rem+env(safe-area-inset-bottom))] flex flex-col gap-3 shrink-0 z-50">
                                     {/* Image Preview */}
                                     {commentImagePreview && (
                                         <div className="relative w-32 h-20 rounded-lg overflow-hidden border border-yellow-500/50 group">
