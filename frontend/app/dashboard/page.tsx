@@ -1036,13 +1036,13 @@ export default function DashboardPage() {
                                                 </div>
 
                                                 <div className="min-w-0 flex-1 space-y-0.5">
-                                                    <div className="flex items-center gap-2">
+                                                    <div className="flex items-start gap-2 flex-wrap">
                                                         {isMetcon ? (
-                                                            <span className="text-[9px] font-bold bg-pink-500/20 text-pink-400 px-1.5 py-0.5 rounded border border-pink-500/20 uppercase tracking-wider">WOD</span>
+                                                            <span className="text-[9px] font-bold bg-pink-500/20 text-pink-400 px-1.5 py-0.5 rounded border border-pink-500/20 uppercase tracking-wider shrink-0 mt-0.5">WOD</span>
                                                         ) : (
-                                                            <span className="text-[9px] font-bold bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded border border-blue-500/20 uppercase tracking-wider">LIFT</span>
+                                                            <span className="text-[9px] font-bold bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded border border-blue-500/20 uppercase tracking-wider shrink-0 mt-0.5">LIFT</span>
                                                         )}
-                                                        <h3 className={cn("text-lg font-black italic text-white leading-none truncate", isMetcon && "text-pink-100")}>
+                                                        <h3 className={cn("text-lg font-black italic text-white leading-tight break-words min-w-0", isMetcon && "text-pink-100")}>
                                                             {block.name.toLowerCase() === 'wod' ? 'Daily Workout' : block.name}
                                                         </h3>
                                                     </div>

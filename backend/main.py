@@ -722,6 +722,36 @@ def delete_log(log_id: str, user_id: str = Query(...)):
         
     return {"status": "success"}
 
+@app.delete("/debug/cleanup")
+def debug_cleanup(user_id: str = Query(...), title: Optional[str] = Query(None), delete_all: bool = Query(False)):
+    """
+    Emergency cleanup endpoint to remove 'ghost' logs.
+    - If title is provided, deletes logs with that title for the user.
+    - If delete_all is True, deletes ALL logs for the user.
+    """
+    with get_db() as conn:
+        c = conn.cursor()
+        
+        if delete_all:
+            c.execute("SELECT id FROM logs WHERE user_id = ?", (user_id,))
+            logs_to_delete = [row[0] for row in c.fetchall()]
+        elif title:
+            # Case-insensitive cleanup
+            c.execute("SELECT id FROM logs WHERE user_id = ? AND lower(title) = lower(?)", (user_id, title))
+            logs_to_delete = [row[0] for row in c.fetchall()]
+        else:
+            return {"status": "error", "message": "Specify title or delete_all=True"}
+
+        count = 0
+        for log_id in logs_to_delete:
+            # Cascade Delete
+            c.execute("DELETE FROM comments WHERE log_id = ?", (log_id,))
+            c.execute("DELETE FROM kudos WHERE log_id = ?", (log_id,))
+            c.execute("DELETE FROM logs WHERE id = ?", (log_id,))
+            count += 1
+
+    return {"status": "success", "deleted_count": count}
+
 
 if __name__ == "__main__":
     import uvicorn
